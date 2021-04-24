@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "418932921924",
+    "project_id": "universal-chain-236713",
+    "storage_bucket": "universal-chain-236713.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418932921924:android:58828bcdca4dd2aeff0e11",
+        "android_client_info": {
+          "package_name": "com.example.asset_management"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "418932921924-dn66gikuu7m64bels0061csa7g71oqbc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNN1zT73i7dl_upRdAWAT38IbENHuOIh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "418932921924-dn66gikuu7m64bels0061csa7g71oqbc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
