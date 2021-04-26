@@ -11,6 +11,7 @@ class Detail extends StatelessWidget {
         centerTitle: true,
       ),
       body: Container(
+        color: Color(0xffd1fdfe),
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: Column(
           children: [
@@ -20,7 +21,7 @@ class Detail extends StatelessWidget {
                 height: 200,
                 alignment: Alignment.center,
                 decoration: new BoxDecoration(
-                  color: Colors.black12,
+                  color: Color(0xffb4dfe5),
                   borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                 ),
                 child: Padding(
@@ -84,22 +85,23 @@ class Detail extends StatelessWidget {
             ),
             Container(
               height: 50,
+              margin: const EdgeInsets.only(top:15.0),
               alignment: Alignment.center,
               decoration: new BoxDecoration(
-                color: Colors.grey,
+                color: Color(0xff303c6c),
                 borderRadius: new BorderRadius.all(Radius.circular(5.0)),
               ),
-              child: Text('Cập nhật thông tin',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Colors.white70),),
+              child: Text('Cập nhật thông tin',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Colors.white),),
             ),
             SizedBox(height: 10,),
             Container(
               height: 50,
               alignment: Alignment.center,
               decoration: new BoxDecoration(
-                color: Colors.grey,
+                color: Colors.redAccent,
                 borderRadius: new BorderRadius.all(Radius.circular(5.0)),
               ),
-              child: Text('Xóa',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Colors.white70),),
+              child: Text('Xóa',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Colors.white),),
             ),
           ],
         ),

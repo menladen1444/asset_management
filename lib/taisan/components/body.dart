@@ -8,6 +8,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Color(0xff96ccd4),
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       child: Column(
         children: [
@@ -18,7 +19,7 @@ class Body extends StatelessWidget {
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.search),
                     hintText: 'Nhập mã tài sản...',
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle: TextStyle(color: Colors.white),
                     fillColor: Colors.black12,
                     filled: true,
                     enabledBorder: const OutlineInputBorder(
@@ -75,7 +76,7 @@ class Body extends StatelessWidget {
                       height: 100,
                       alignment: Alignment.center,
                       decoration: new BoxDecoration(
-                        color: Colors.black12,
+                        color: Color(0xffd1fdfe),
                         borderRadius:
                             new BorderRadius.all(Radius.circular(5.0)),
                       ),
@@ -121,7 +122,7 @@ class Body extends StatelessWidget {
                     height: 100,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Colors.black12,
+                      color: Color(0xffd1fdfe),
                       borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Padding(
@@ -164,7 +165,7 @@ class Body extends StatelessWidget {
                     height: 100,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Colors.black12,
+                      color: Color(0xffd1fdfe),
                       borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Padding(
@@ -207,7 +208,7 @@ class Body extends StatelessWidget {
                     height: 100,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Colors.black12,
+                      color: Color(0xffd1fdfe),
                       borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Padding(
@@ -250,7 +251,7 @@ class Body extends StatelessWidget {
                     height: 100,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Colors.black12,
+                      color: Color(0xffd1fdfe),
                       borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Padding(
@@ -293,7 +294,7 @@ class Body extends StatelessWidget {
                     height: 100,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Colors.black12,
+                      color: Color(0xffd1fdfe),
                       borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Padding(
@@ -336,7 +337,7 @@ class Body extends StatelessWidget {
                     height: 100,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Colors.black12,
+                      color: Color(0xffd1fdfe),
                       borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Padding(
@@ -379,7 +380,7 @@ class Body extends StatelessWidget {
                     height: 100,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Colors.black12,
+                      color: Color(0xffd1fdfe),
                       borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Padding(
@@ -422,7 +423,7 @@ class Body extends StatelessWidget {
                     height: 100,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Colors.black12,
+                      color: Color(0xffd1fdfe),
                       borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Padding(
@@ -465,7 +466,7 @@ class Body extends StatelessWidget {
                     height: 100,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Colors.black12,
+                      color: Color(0xffd1fdfe),
                       borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Padding(
@@ -508,7 +509,7 @@ class Body extends StatelessWidget {
                     height: 100,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Colors.black12,
+                      color: Color(0xffd1fdfe),
                       borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Padding(
@@ -551,7 +552,7 @@ class Body extends StatelessWidget {
                     height: 100,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Colors.black12,
+                      color: Color(0xffd1fdfe),
                       borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Padding(

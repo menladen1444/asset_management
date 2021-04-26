@@ -6,6 +6,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Color(0xff031f3b),
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       child: Column(
         children: [
@@ -17,7 +18,7 @@ class Body extends StatelessWidget {
                     prefixIcon: Icon(Icons.search),
                     hintText: 'Nhập tên phòng...',
                     hintStyle: TextStyle(color: Colors.grey),
-                    fillColor: Colors.black12,
+                    fillColor: Color(0xff072a52),
                     filled: true,
                     enabledBorder: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -68,7 +69,7 @@ class Body extends StatelessWidget {
                       height: 100,
                       alignment: Alignment.center,
                       decoration: new BoxDecoration(
-                        color: Colors.black12,
+                        color: Color(0xffb4dfe5),
                         borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                       ),
                       child: Column(
@@ -90,7 +91,7 @@ class Body extends StatelessWidget {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => TaiSan(title: 'Phòng 01')),
+                      MaterialPageRoute(builder: (context) => TaiSan(title: 'Phòng 02')),
                     );
                   },
                   child: Padding(
@@ -99,14 +100,14 @@ class Body extends StatelessWidget {
                       height: 100,
                       alignment: Alignment.center,
                       decoration: new BoxDecoration(
-                        color: Colors.black12,
+                        color: Color(0xffb4dfe5),
                         borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Phòng 01',
+                            'Phòng 02',
                             style: TextStyle(fontSize: 25),
                           ),
                           Text(
@@ -121,7 +122,7 @@ class Body extends StatelessWidget {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => TaiSan(title: 'Phòng 01')),
+                      MaterialPageRoute(builder: (context) => TaiSan(title: 'Phòng 03')),
                     );
                   },
                   child: Padding(
@@ -130,14 +131,14 @@ class Body extends StatelessWidget {
                       height: 100,
                       alignment: Alignment.center,
                       decoration: new BoxDecoration(
-                        color: Colors.black12,
+                        color: Color(0xffb4dfe5),
                         borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Phòng 01',
+                            'Phòng 03',
                             style: TextStyle(fontSize: 25),
                           ),
                           Text(
@@ -154,14 +155,14 @@ class Body extends StatelessWidget {
                     height: 100,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Colors.black12,
+                      color: Color(0xffb4dfe5),
                       borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Phòng 01',
+                          'Phòng 04',
                           style: TextStyle(fontSize: 25),
                         ),
                         Text(

@@ -27,14 +27,15 @@ class _MyAppState extends State<MyApp>{
   Widget build(BuildContext context) {
     return new SplashScreen(
       seconds: 5,
+
       navigateAfterSeconds: new StartPage(),
       // navigateAfterFuture: loadFromFuture(),
       title: new Text(
         'Ứng dụng quản lý tài sản số 1 Việt Nam',
-        style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0,color: Color(0xff94b4c4)),
       ),
       image: new Image.asset('assets/images/logo.png'),
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xff04294f),
       styleTextUnderTheLoader: new TextStyle(),
       loadingText: new Text('Đang tải'),
       photoSize: 150.0,

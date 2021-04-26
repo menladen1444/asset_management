@@ -5,6 +5,7 @@ class Create extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xff2b598c),
         body: Column(
           children: [
             Container(
@@ -21,7 +22,7 @@ class Create extends StatelessWidget {
             ),
             Container(
               child: Text('THÊM TÀI SẢN MỚI',
-                style: TextStyle(fontFamily: 'Anton', color: Colors.indigoAccent,fontSize: 50,fontWeight:FontWeight.w500),
+                style: TextStyle(fontFamily: 'Anton', color: Colors.lightBlueAccent,fontSize: 40,fontWeight:FontWeight.w500),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -32,6 +33,7 @@ class Create extends StatelessWidget {
                   children: [
                     TextField(
                       decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
                         hintText: 'Tên tài sản...',
                         hintStyle: TextStyle(color: Colors.grey),
                         fillColor: Colors.black12,
@@ -51,6 +53,7 @@ class Create extends StatelessWidget {
                     SizedBox(height: 20),
                     TextField(
                       decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
                         hintText: 'Chọn loại tài sản',
                         hintStyle: TextStyle(color: Colors.grey),
                         fillColor: Colors.black12,
@@ -71,6 +74,7 @@ class Create extends StatelessWidget {
                     SizedBox(height: 20),
                     TextField(
                       decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
                         hintText: 'Ngày sử dụng...',
                         hintStyle: TextStyle(color: Colors.grey),
                         fillColor: Colors.black12,
@@ -91,6 +95,7 @@ class Create extends StatelessWidget {
                     SizedBox(height: 20),
                     TextField(
                       decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
                         hintText: 'Tình trạng...',
                         hintStyle: TextStyle(color: Colors.grey),
                         fillColor: Colors.black12,
@@ -110,6 +115,7 @@ class Create extends StatelessWidget {
                     SizedBox(height: 20),
                     TextField(
                       decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
                         hintText: 'Serial...',
                         hintStyle: TextStyle(color: Colors.grey),
                         fillColor: Colors.black12,
@@ -129,6 +135,7 @@ class Create extends StatelessWidget {
                     SizedBox(height: 20),
                     TextField(
                       decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
                         hintText: 'Khối lượng...',
                         hintStyle: TextStyle(color: Colors.grey),
                         fillColor: Colors.black12,

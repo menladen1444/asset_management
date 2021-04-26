@@ -47,6 +47,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/logo.png
+    - assets/images/bg.png
   fonts:
     - family: Lobster
       fonts:

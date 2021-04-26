@@ -1,9 +1,10 @@
 import 'package:asset_management/homepage/homepage.dart';
 import 'package:flutter/material.dart';
-import 'register.dart';
+import 'package:asset_management/account/register.dart';
 
 class Login extends StatelessWidget {
-  final Color foregroundColor = Colors.white;
+  final Color foregroundColor = Color(0xff000e0f);
+  final Color backgroundInput = Color(0xff031f3b);
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +21,10 @@ class Login extends StatelessWidget {
           children: <Widget>[
             Container(
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(top: 40.0, bottom: 10.0,left:35.0),
+              padding: const EdgeInsets.only(top: 40.0, bottom: 10.0,left:25.0),
               child: IconButton(
                 icon: const Icon(Icons.arrow_back_sharp),
-                color: Colors.black,
+                color: Color(0xff0a4044),
                 iconSize: 30,
                 onPressed: () {
                   Navigator.pop(context);
@@ -31,7 +32,7 @@ class Login extends StatelessWidget {
               ),
             ),
             new Container(
-              padding: const EdgeInsets.only(top: 80.0, bottom: 10.0),
+              padding: const EdgeInsets.only(top: 50.0, bottom: 10.0),
               child: Center(
                 child: new Column(
                   children: <Widget>[
@@ -39,7 +40,7 @@ class Login extends StatelessWidget {
                       height: 100.0,
                       width: 250.0,
                       child: new Hero(
-                        tag: 'splashscreenImage',
+                        tag: 'hero',
                         child: CircleAvatar(
                           backgroundColor: Colors.transparent,
                           radius: 48.0,
@@ -53,13 +54,14 @@ class Login extends StatelessWidget {
             ),
             new Container(
               width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(left: 40.0, right: 40.0),
+              height: 55,
+              margin: const EdgeInsets.only(left: 40.0, right: 40.0,top:15.0),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(3),
-                color: Color(0xffc1c1c1),
+                borderRadius: BorderRadius.circular(8),
+                color: Color(0xff344b4d),
               ),
-              padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+              padding: const EdgeInsets.only(left: 5.0, right: 10.0),
               child: new Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,7 +77,7 @@ class Login extends StatelessWidget {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Email',
-                        hintStyle: TextStyle(color: this.foregroundColor),
+                        hintStyle: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
@@ -83,11 +85,12 @@ class Login extends StatelessWidget {
               ),
             ),
             new Container(
-              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+              padding: const EdgeInsets.only(left: 15.0, right: 10.0),
               margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 15.0),
+              height: 55,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(3),
-                color: Color(0xffc1c1c1),
+                borderRadius: BorderRadius.circular(8),
+                color: Color(0xff344b4d),
               ),
               child: new Row(
                 children: <Widget>[
@@ -98,39 +101,52 @@ class Login extends StatelessWidget {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Mật khẩu',
-                        hintStyle: TextStyle(color: this.foregroundColor),
+                        hintStyle: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-           new Container(
-             margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 40.0),
-             child: new Row(
-               children: <Widget>[
-                 new Expanded(
-                   child: ElevatedButton(
-                     style: ElevatedButton.styleFrom(
-                       padding: EdgeInsets.symmetric(horizontal: 50, vertical: 17),
-                       primary: Color(0xff1e815f),
-                       shape: RoundedRectangleBorder(
-                         borderRadius: BorderRadius.circular(5),
-                       ),
-                     ),
-                     onPressed: () {
-                       // Respond to button press
-                       Navigator.push(context,MaterialPageRoute(builder: (context)=>HomePage()));
-                     },
-                     child: Text('ĐĂNG NHẬP'),
-                   ),
-                 ),
-               ],
-             ),
+            new Container(
+              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 30.0),
+              child: new Row(
+                children: <Widget>[
+                  new Expanded(
+                    child: Container(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                          primary: Color(0xffa1c9d2),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          );
+                        },
+                        child: Text('ĐĂNG NHẬP',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.black)),
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.transparent,
+                            width: 5.0,
+                          ),
+
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(15),
                 boxShadow: [
-                  BoxShadow(color: Color(0xff145b42), spreadRadius: 2),
+                  BoxShadow(color: Color(0xff057790),offset: Offset(0, 0.75)),
                 ],
               ),
             ),
@@ -144,23 +160,23 @@ class Login extends StatelessWidget {
                   Expanded(
                     child: Align(
                       alignment: Alignment.centerRight,
-                      child: Text("Chưa có tài khoản?", style: TextStyle(color: Colors.black),
-                        ),
+                      child: Text("Chưa có tài khoản?", style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                   Expanded(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Register()),
-                          );
-                        },
-                        child: new Text("Đăng ký"),
-                      ),
-                    )
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Register()),
+                            );
+                          },
+                          child: new Text("Đăng ký"),
+                        ),
+                      )
 
                   ),
                 ],

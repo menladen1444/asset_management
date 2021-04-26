@@ -6,7 +6,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.transparent,
+        color: Color(0xff031f3b),
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -17,7 +17,7 @@ class Body extends StatelessWidget {
                 alignment: Alignment.center,
                 margin: const EdgeInsets.all(5),
                 decoration: new BoxDecoration(
-                  color: Colors.black26,
+                  color: Color(0xff244a74),
                   borderRadius: new BorderRadius.all(Radius.circular(20.0)),
                 ),
                 child: Column(
@@ -41,7 +41,7 @@ class Body extends StatelessWidget {
                   alignment: Alignment.center,
                   margin: const EdgeInsets.all(5),
                   decoration: new BoxDecoration(
-                    color: Colors.black26,
+                    color: Color(0xff244a74),
                     borderRadius: new BorderRadius.all(Radius.circular(20.0)),
                   ),
                   child: Column(
@@ -67,7 +67,7 @@ class Body extends StatelessWidget {
                   alignment: Alignment.center,
                   margin: const EdgeInsets.all(5),
                   decoration: new BoxDecoration(
-                    color: Colors.black26,
+                    color: Color(0xff244a74),
                     borderRadius: new BorderRadius.all(Radius.circular(20.0)),
                   ),
                   child: Column(

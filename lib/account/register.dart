@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'package:asset_management/account/login.dart';
 
 class Register extends StatelessWidget {
-  final Color foregroundColor = Colors.white;
+  final Color foregroundColor = Color(0xff000e0f);
+  final Color backgroundInput = Color(0xff031f3b);
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +20,10 @@ class Register extends StatelessWidget {
           children: <Widget>[
             Container(
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(top: 40.0, bottom: 10.0,left:35.0),
+              padding: const EdgeInsets.only(top: 40.0, bottom: 10.0,left:25.0),
               child: IconButton(
                 icon: const Icon(Icons.arrow_back_sharp),
-                color: Colors.black,
+                color: Color(0xff0a4044),
                 iconSize: 30,
                 onPressed: () {
                   Navigator.pop(context);
@@ -30,7 +31,7 @@ class Register extends StatelessWidget {
               ),
             ),
             new Container(
-              padding: const EdgeInsets.only(top: 50.0, bottom: 10.0),
+              padding: const EdgeInsets.only(top: 30.0, bottom: 10.0),
               child: Center(
                 child: new Column(
                   children: <Widget>[
@@ -38,7 +39,7 @@ class Register extends StatelessWidget {
                       height: 100.0,
                       width: 250.0,
                       child: new Hero(
-                        tag: 'splashscreenImage',
+                        tag: 'hero',
                         child: CircleAvatar(
                           backgroundColor: Colors.transparent,
                           radius: 48.0,
@@ -52,13 +53,14 @@ class Register extends StatelessWidget {
             ),
             new Container(
               width: MediaQuery.of(context).size.width,
+              height: 55,
               margin: const EdgeInsets.only(left: 40.0, right: 40.0),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(3),
-                color: Color(0xffc1c1c1),
+                borderRadius: BorderRadius.circular(10),
+                color: Color(0xff344b4d),
               ),
-              padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+              padding: const EdgeInsets.only(left: 5.0, right: 10.0),
               child: new Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,7 +76,7 @@ class Register extends StatelessWidget {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Họ và tên',
-                        hintStyle: TextStyle(color: this.foregroundColor),
+                        hintStyle: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
@@ -83,13 +85,14 @@ class Register extends StatelessWidget {
             ),
             new Container(
               width: MediaQuery.of(context).size.width,
+              height: 55,
               margin: const EdgeInsets.only(left: 40.0, right: 40.0,top:15.0),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(3),
-                color: Color(0xffc1c1c1),
+                borderRadius: BorderRadius.circular(8),
+                color: Color(0xff344b4d),
               ),
-              padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+              padding: const EdgeInsets.only(left: 5.0, right: 10.0),
               child: new Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -105,7 +108,7 @@ class Register extends StatelessWidget {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Email',
-                        hintStyle: TextStyle(color: this.foregroundColor),
+                        hintStyle: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
@@ -113,11 +116,12 @@ class Register extends StatelessWidget {
               ),
             ),
             new Container(
-              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+              padding: const EdgeInsets.only(left: 15.0, right: 10.0),
               margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 15.0),
+              height: 55,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(3),
-                color: Color(0xffc1c1c1),
+                borderRadius: BorderRadius.circular(8),
+                color: Color(0xff344b4d),
               ),
               child: new Row(
                 children: <Widget>[
@@ -128,7 +132,7 @@ class Register extends StatelessWidget {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Mật khẩu',
-                        hintStyle: TextStyle(color: this.foregroundColor),
+                        hintStyle: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
@@ -140,26 +144,40 @@ class Register extends StatelessWidget {
               child: new Row(
                 children: <Widget>[
                   new Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 17),
-                        primary: Color(0xff1e815f),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
+                    child: Container(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                          primary: Color(0xff069bbc),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Register()),
+                          );
+                        },
+                        child: Text('ĐĂNG KÝ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.black)),
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.transparent,
+                            width: 5.0,
+                          ),
+
                         ),
                       ),
-                      onPressed: () {
-                        // Respond to button press
-                      },
-                      child: Text('TẠO TÀI KHOẢN'),
                     ),
                   ),
                 ],
               ),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(15),
                 boxShadow: [
-                  BoxShadow(color: Color(0xff145b42), spreadRadius: 2),
+                  BoxShadow(color: Color(0xff0a7b94),offset: Offset(0, 0.75)),
                 ],
               ),
             ),
@@ -173,7 +191,7 @@ class Register extends StatelessWidget {
                   Expanded(
                     child: Align(
                       alignment: Alignment.centerRight,
-                      child: Text("Đã có tài khoản?", style: TextStyle(color: Colors.black),
+                      child: Text("Đã có tài khoản?", style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),

@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xff032346),
       appBar: AppBar(
         title: title(),
         centerTitle: true,
@@ -41,10 +42,12 @@ class _HomePageState extends State<HomePage> {
       ),
       body: screen[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xff183e68),
         type: BottomNavigationBarType.fixed,
         currentIndex: this.selectedIndex,
         items: [
           BottomNavigationBarItem(
+
             icon: Icon(Icons.home),
             label: 'Trang chủ',
           ),
