@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:asset_management/account/login.dart';
 
 class Register extends StatelessWidget {
-  final Color foregroundColor = Color(0xff000e0f);
+  final Color foregroundColor = Color(0xff010e1c);
   final Color backgroundInput = Color(0xff031f3b);
 
   @override
@@ -23,7 +23,7 @@ class Register extends StatelessWidget {
               padding: const EdgeInsets.only(top: 40.0, bottom: 10.0,left:25.0),
               child: IconButton(
                 icon: const Icon(Icons.arrow_back_sharp),
-                color: Color(0xff0a4044),
+                color: Colors.white60,
                 iconSize: 30,
                 onPressed: () {
                   Navigator.pop(context);
@@ -58,7 +58,7 @@ class Register extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Color(0xff344b4d),
+                color: Color(0xff041629),
               ),
               padding: const EdgeInsets.only(left: 5.0, right: 10.0),
               child: new Row(
@@ -67,16 +67,17 @@ class Register extends StatelessWidget {
                 children: <Widget>[
                   new Padding(
                     padding:
-                    EdgeInsets.only(top: 20.0, bottom: 10.0, right: 00.0,left: 10.0),
+                    EdgeInsets.only(top: 20.0, bottom: 10.0, right: 00.0),
                   ),
                   new Expanded(
                     child: TextField(
                       textAlign: TextAlign.left,
                       style: new TextStyle(color: Colors.white),
                       decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.drive_file_rename_outline,color: Color(0xff593b12),size: 30,),
                         border: InputBorder.none,
                         hintText: 'Họ và tên',
-                        hintStyle: TextStyle(color: Colors.white),
+                        hintStyle: TextStyle(color: Colors.white,fontSize: 20),
                       ),
                     ),
                   ),
@@ -90,7 +91,7 @@ class Register extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Color(0xff344b4d),
+                color: Color(0xff041629),
               ),
               padding: const EdgeInsets.only(left: 5.0, right: 10.0),
               child: new Row(
@@ -99,16 +100,17 @@ class Register extends StatelessWidget {
                 children: <Widget>[
                   new Padding(
                     padding:
-                    EdgeInsets.only(top: 20.0, bottom: 10.0, right: 00.0,left: 10.0),
+                    EdgeInsets.only(top: 20.0, bottom: 10.0, right: 00.0),
                   ),
                   new Expanded(
                     child: TextField(
                       textAlign: TextAlign.left,
                       style: new TextStyle(color: Colors.white),
                       decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.email,color: Color(0xff593b12),size: 30,),
                         border: InputBorder.none,
                         hintText: 'Email',
-                        hintStyle: TextStyle(color: Colors.white),
+                        hintStyle: TextStyle(color: Colors.white,fontSize: 20),
                       ),
                     ),
                   ),
@@ -116,12 +118,12 @@ class Register extends StatelessWidget {
               ),
             ),
             new Container(
-              padding: const EdgeInsets.only(left: 15.0, right: 10.0),
+              padding: const EdgeInsets.only(left: 5.0, right: 10.0),
               margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 15.0),
               height: 55,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Color(0xff344b4d),
+                color: Color(0xff041629),
               ),
               child: new Row(
                 children: <Widget>[
@@ -130,9 +132,10 @@ class Register extends StatelessWidget {
                       obscureText: true,
                       textAlign: TextAlign.left,
                       decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.vpn_key,color: Color(0xff593b12),size: 30,),
                         border: InputBorder.none,
                         hintText: 'Mật khẩu',
-                        hintStyle: TextStyle(color: Colors.white),
+                        hintStyle: TextStyle(color: Colors.white,fontSize: 20),
                       ),
                     ),
                   ),
@@ -148,7 +151,7 @@ class Register extends StatelessWidget {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                          primary: Color(0xff069bbc),
+                          primary: Color(0xffd9902b),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -177,7 +180,7 @@ class Register extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
-                  BoxShadow(color: Color(0xff0a7b94),offset: Offset(0, 0.75)),
+                  BoxShadow(color: Color(0xffb4731a),offset: Offset(0, 0.75)),
                 ],
               ),
             ),

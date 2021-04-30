@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:asset_management/account/register.dart';
 
 class Login extends StatelessWidget {
-  final Color foregroundColor = Color(0xff000e0f);
+  final Color foregroundColor = Color(0xffa0b2b9);
   final Color backgroundInput = Color(0xff031f3b);
 
   @override
@@ -24,7 +24,7 @@ class Login extends StatelessWidget {
               padding: const EdgeInsets.only(top: 40.0, bottom: 10.0,left:25.0),
               child: IconButton(
                 icon: const Icon(Icons.arrow_back_sharp),
-                color: Color(0xff0a4044),
+                color: Colors.black54,
                 iconSize: 30,
                 onPressed: () {
                   Navigator.pop(context);
@@ -44,7 +44,7 @@ class Login extends StatelessWidget {
                         child: CircleAvatar(
                           backgroundColor: Colors.transparent,
                           radius: 48.0,
-                          child: Image.asset('assets/images/logo.png'),
+                          child: Image.asset('assets/images/logo2.png'),
                         ),
                       ),
                     ),
@@ -59,7 +59,7 @@ class Login extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Color(0xff344b4d),
+                color: Color(0xffd9902b),
               ),
               padding: const EdgeInsets.only(left: 5.0, right: 10.0),
               child: new Row(
@@ -68,16 +68,17 @@ class Login extends StatelessWidget {
                 children: <Widget>[
                   new Padding(
                     padding:
-                    EdgeInsets.only(top: 20.0, bottom: 10.0, right: 00.0,left: 10.0),
+                    EdgeInsets.only(top: 20.0, bottom: 10.0, right: 00.0),
                   ),
                   new Expanded(
                     child: TextField(
                       textAlign: TextAlign.left,
                       style: new TextStyle(color: Colors.white),
                       decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.email,color: Color(0xff593b12),size: 30,),
                         border: InputBorder.none,
                         hintText: 'Email',
-                        hintStyle: TextStyle(color: Colors.white),
+                        hintStyle: TextStyle(color: Color(0xff593b12),fontSize: 20),
                       ),
                     ),
                   ),
@@ -85,12 +86,12 @@ class Login extends StatelessWidget {
               ),
             ),
             new Container(
-              padding: const EdgeInsets.only(left: 15.0, right: 10.0),
+              padding: const EdgeInsets.only(left: 5.0, right: 10.0),
               margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 15.0),
               height: 55,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Color(0xff344b4d),
+                color: Color(0xffd9902b),
               ),
               child: new Row(
                 children: <Widget>[
@@ -99,9 +100,10 @@ class Login extends StatelessWidget {
                       obscureText: true,
                       textAlign: TextAlign.left,
                       decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.vpn_key,color: Color(0xff593b12),size: 30,),
                         border: InputBorder.none,
                         hintText: 'Mật khẩu',
-                        hintStyle: TextStyle(color: Colors.white),
+                        hintStyle: TextStyle(color: Color(0xff593b12),fontSize: 20),
                       ),
                     ),
                   ),
@@ -117,7 +119,7 @@ class Login extends StatelessWidget {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                          primary: Color(0xffa1c9d2),
+                          primary: Color(0xff010e1c),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -128,7 +130,7 @@ class Login extends StatelessWidget {
                             MaterialPageRoute(builder: (context) => HomePage()),
                           );
                         },
-                        child: Text('ĐĂNG NHẬP',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.black)),
+                        child: Text('ĐĂNG NHẬP',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.white)),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
@@ -146,7 +148,7 @@ class Login extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
-                  BoxShadow(color: Color(0xff057790),offset: Offset(0, 0.75)),
+                  BoxShadow(color: Color(0xff3c2e08),offset: Offset(0, 0.75)),
                 ],
               ),
             ),
@@ -174,7 +176,7 @@ class Login extends StatelessWidget {
                               MaterialPageRoute(builder: (context) => Register()),
                             );
                           },
-                          child: new Text("Đăng ký"),
+                          child: new Text("Đăng ký",style: TextStyle(color: Color(0xff010e1c)),),
                         ),
                       )
 

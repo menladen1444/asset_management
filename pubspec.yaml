@@ -47,6 +47,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/logo.png
+    - assets/images/logo2.png
     - assets/images/bg.png
   fonts:
     - family: Lobster
@@ -58,6 +59,13 @@ flutter:
       fonts:
         - asset: fonts/Anton-Regular.ttf
           weight: 700
+    - family: YanoneKaffeesatz
+      fonts:
+        - asset: fonts/YanoneKaffeesatz-Light.ttf
+
+    - family: BalooDa2
+      fonts:
+        - asset: fonts/BalooDa2-SemiBold.ttf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

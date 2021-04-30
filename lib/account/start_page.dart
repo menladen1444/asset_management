@@ -18,13 +18,13 @@ class StartPage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Container(
-              padding: const EdgeInsets.only(top: 100.0, bottom: 10.0),
+              padding: const EdgeInsets.only(top: 60.0, bottom: 0.0),
               child: Center(
                 child: new Column(
                   children: <Widget>[
                     Container(
                       height: 100.0,
-                      width: 320.0,
+                      width: 280.0,
                       child: new Hero(
                         tag: 'hero',
                         child: CircleAvatar(
@@ -39,9 +39,9 @@ class StartPage extends StatelessWidget {
               ),
             ),
             new Container(
-              padding: const EdgeInsets.only(left: 70.0, right: 70,bottom: 30,top: 30),
+              padding: const EdgeInsets.only(left: 90.0, right: 90),
               child: Text('quản lý tài sản của bạn thật dễ dàng',
-                style: TextStyle(fontFamily: 'Lobster', color: Color(0xff94b4c4),fontSize: 28,fontWeight:FontWeight.w500),
+                style: TextStyle(height: 1.5,letterSpacing: 4,fontFamily: 'YanoneKaffeesatz', color: Color(0xff94b4c4),fontSize: 25,fontWeight:FontWeight.w500),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -53,10 +53,10 @@ class StartPage extends StatelessWidget {
                     child: Container(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 25),
+                          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 13),
                           primary: Color(0xff069bbc),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(35),
                           ),
                         ),
                         onPressed: () {
@@ -65,7 +65,7 @@ class StartPage extends StatelessWidget {
                             MaterialPageRoute(builder: (context) => Register()),
                           );
                         },
-                        child: Text('ĐĂNG KÝ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.black)),
+                        child: Text('ĐĂNG KÝ',style: TextStyle(fontFamily: 'BalooDa2',fontWeight: FontWeight.bold,fontSize: 22,color: Colors.black)),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
@@ -81,24 +81,24 @@ class StartPage extends StatelessWidget {
                 ],
               ),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(35),
                 boxShadow: [
                   BoxShadow(color: Color(0xff0a7b94),offset: Offset(0, 0.75)),
                 ],
               ),
             ),
             new Container(
-              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 30.0),
+              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 18.0),
               child: new Row(
                 children: <Widget>[
                   new Expanded(
                     child: Container(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 25),
+                          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 13),
                           primary: Color(0xffa1c9d2),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(35),
                           ),
                         ),
                         onPressed: () {
@@ -107,7 +107,7 @@ class StartPage extends StatelessWidget {
                             MaterialPageRoute(builder: (context) => Login()),
                           );
                         },
-                        child: Text('ĐĂNG NHẬP',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.black)),
+                        child: Text('ĐĂNG NHẬP',style: TextStyle(fontFamily: 'BalooDa2',fontWeight: FontWeight.bold,fontSize: 22,color: Colors.black)),
                       ),
                       decoration: BoxDecoration(
                         border: Border(
@@ -123,7 +123,7 @@ class StartPage extends StatelessWidget {
                 ],
               ),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(35),
                 boxShadow: [
                   BoxShadow(color: Color(0xff057790),offset: Offset(0, 0.75)),
                 ],

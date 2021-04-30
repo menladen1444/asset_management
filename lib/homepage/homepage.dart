@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff032346),
+      backgroundColor: Color(0xff04294f),
       appBar: AppBar(
         backgroundColor: Color(0xff194370),
         title: title(),
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Color(0xff183e68),
         type: BottomNavigationBarType.fixed,
         currentIndex: this.selectedIndex,
-        selectedItemColor: Colors.lightBlueAccent,
+        selectedItemColor: Color(0xffd08621),
         unselectedItemColor: Colors.white60,
         items: [
           BottomNavigationBarItem(
