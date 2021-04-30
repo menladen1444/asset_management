@@ -1,3 +1,4 @@
+import 'package:asset_management/room/components/create.dart';
 import 'package:asset_management/taisan/taisan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,7 +7,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(0xff031f3b),
+      color: Color(0xff244a74),
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       child: Column(
         children: [
@@ -45,7 +46,12 @@ class Body extends StatelessWidget {
                   iconSize: 42,
                   color: Colors.white38,
                   icon: Icon(Icons.add),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CreateRoom()),
+                    );
+                  },
                 ),
               ),
             ],
@@ -69,7 +75,7 @@ class Body extends StatelessWidget {
                       height: 100,
                       alignment: Alignment.center,
                       decoration: new BoxDecoration(
-                        color: Color(0xffb4dfe5),
+                        color: Color(0xff12355b),
                         borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                       ),
                       child: Column(
@@ -77,10 +83,11 @@ class Body extends StatelessWidget {
                         children: [
                           Text(
                             'Phòng 01',
-                            style: TextStyle(fontSize: 25),
+                            style: TextStyle(fontSize: 30,color:Color(0xff6c8bad),fontWeight: FontWeight.bold),
                           ),
+                          Divider(height: 6,),
                           Text(
-                            '20 tài sản',
+                            '20 tài sản', style: TextStyle(color:Color(0xff6c8198)),
                           ),
                         ],
                       ),
@@ -100,7 +107,7 @@ class Body extends StatelessWidget {
                       height: 100,
                       alignment: Alignment.center,
                       decoration: new BoxDecoration(
-                        color: Color(0xffb4dfe5),
+                        color: Color(0xff12355b),
                         borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                       ),
                       child: Column(
@@ -108,10 +115,11 @@ class Body extends StatelessWidget {
                         children: [
                           Text(
                             'Phòng 02',
-                            style: TextStyle(fontSize: 25),
+                            style: TextStyle(fontSize: 30,color:Color(0xff6c8bad),fontWeight: FontWeight.bold),
                           ),
+                          Divider(height: 6,),
                           Text(
-                            '20 tài sản',
+                            '20 tài sản',style: TextStyle(color:Color(0xff6c8198)),
                           ),
                         ],
                       ),
@@ -131,7 +139,7 @@ class Body extends StatelessWidget {
                       height: 100,
                       alignment: Alignment.center,
                       decoration: new BoxDecoration(
-                        color: Color(0xffb4dfe5),
+                        color: Color(0xff12355b),
                         borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                       ),
                       child: Column(
@@ -139,10 +147,11 @@ class Body extends StatelessWidget {
                         children: [
                           Text(
                             'Phòng 03',
-                            style: TextStyle(fontSize: 25),
+                            style: TextStyle(fontSize: 30,color:Color(0xff6c8bad),fontWeight: FontWeight.bold),
                           ),
+                          Divider(height: 6,),
                           Text(
-                            '20 tài sản',
+                            '20 tài sản',style: TextStyle(color:Color(0xff6c8198)),
                           ),
                         ],
                       ),
@@ -155,7 +164,7 @@ class Body extends StatelessWidget {
                     height: 100,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Color(0xffb4dfe5),
+                      color: Color(0xff12355b),
                       borderRadius: new BorderRadius.all(Radius.circular(5.0)),
                     ),
                     child: Column(
@@ -163,10 +172,11 @@ class Body extends StatelessWidget {
                       children: [
                         Text(
                           'Phòng 04',
-                          style: TextStyle(fontSize: 25),
+                          style: TextStyle(fontSize: 30,color:Color(0xff6c8bad),fontWeight: FontWeight.bold),
                         ),
+                        Divider(height: 6,),
                         Text(
-                          '20 tài sản',
+                          '20 tài sản',style: TextStyle(color:Color(0xff6c8198)),
                         ),
                       ],
                     ),

@@ -8,8 +8,8 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(top:20,left: 20,right: 20),
       color: Color(0xff96ccd4),
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       child: Column(
         children: [
           Row(

@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Color(0xff032346),
       appBar: AppBar(
+        backgroundColor: Color(0xff194370),
         title: title(),
         centerTitle: true,
         actions: [
@@ -45,9 +46,10 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Color(0xff183e68),
         type: BottomNavigationBarType.fixed,
         currentIndex: this.selectedIndex,
+        selectedItemColor: Colors.lightBlueAccent,
+        unselectedItemColor: Colors.white60,
         items: [
           BottomNavigationBarItem(
-
             icon: Icon(Icons.home),
             label: 'Trang chủ',
           ),

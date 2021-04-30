@@ -7,6 +7,7 @@ class Detail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xff194370),
         title: Text('Chi tiết tài sản'),
         centerTitle: true,
       ),

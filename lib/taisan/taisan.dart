@@ -15,6 +15,7 @@ class _TaiSanState extends State<TaiSan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xff194370),
         title: Text(widget.title),
         centerTitle: true,
       ),
