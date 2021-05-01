@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:asset_management/account/register.dart';
 
 class Login extends StatelessWidget {
-  final Color foregroundColor = Color(0xffa0b2b9);
+  final Color foregroundColor = Color(0xff124272);
   final Color backgroundInput = Color(0xff031f3b);
 
   @override
@@ -119,7 +119,7 @@ class Login extends StatelessWidget {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                          primary: Color(0xff010e1c),
+                          primary: Color(0xff02162c),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -148,7 +148,7 @@ class Login extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
-                  BoxShadow(color: Color(0xff3c2e08),offset: Offset(0, 0.75)),
+                  BoxShadow(color: Color(0xff010e1c),offset: Offset(0, 0.75)),
                 ],
               ),
             ),

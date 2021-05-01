@@ -1,3 +1,4 @@
+import 'package:asset_management/account/detail/detail_account.dart';
 import 'package:asset_management/homepage/components/body.dart';
 import 'package:asset_management/room/room.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,11 +35,19 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Color(0xff04294f),
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Color(0xff021930),
+        ),
         backgroundColor: Color(0xff194370),
         title: title(),
         centerTitle: true,
         actions: [
-          IconButton(icon: Icon(Icons.account_circle_outlined), onPressed: () {  }, )
+          IconButton(icon: Icon(Icons.account_circle,size: 30,color:Color(0xff021930)), onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DetailAccount()),
+            );
+          }, )
         ],
       ),
       body: screen[selectedIndex],
@@ -54,7 +63,7 @@ class _HomePageState extends State<HomePage> {
             label: 'Trang chủ',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.room),
+            icon: Icon(Icons.room_outlined),
             label: 'Danh sách phòng',
           )
         ],

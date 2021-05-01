@@ -7,7 +7,7 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         color: Color(0xff04294f),
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: EdgeInsets.symmetric(vertical: 25, horizontal: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -17,16 +17,20 @@ class Body extends StatelessWidget {
                 alignment: Alignment.center,
                 margin: const EdgeInsets.all(5),
                 decoration: new BoxDecoration(
-                  color: Color(0xff1f4d7b),
+                  gradient: new LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: new Alignment(1.0, 0.0),
+                    colors: [Color(0xffe7a720), Color(0xffedb540)],
+                  ),
                   borderRadius: new BorderRadius.all(Radius.circular(10.0)),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.image, color: Color(0xff6c8bad), size: 90),
+                    Icon(Icons.image, color: Color(0xff04294f), size: 90),
                     Text(
                       'Quét mã từ thư viện ảnh',
-                      style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Color(0xff6c8bad)),
+                      style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Color(0xff04294f)),
                     ),
                   ],
                 ),
@@ -41,15 +45,19 @@ class Body extends StatelessWidget {
                   alignment: Alignment.center,
                   margin: const EdgeInsets.all(5),
                   decoration: new BoxDecoration(
-                    color: Color(0xff1f4d7b),
+                    gradient: new LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: new Alignment(1.0, 0.0),
+                      colors: [Color(0xffe7a720), Color(0xffedb540)],
+                    ),
                     borderRadius: new BorderRadius.all(Radius.circular(10.0)),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.qr_code_scanner,
-                          color: Color(0xff6c8bad), size: 90),
-                      Text('Quét mã QR', style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Color(0xff6c8bad))),
+                          color: Color(0xff04294f), size: 90),
+                      Text('Quét mã QR', style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Color(0xff04294f))),
                     ],
                   ),
                 ),
@@ -67,14 +75,18 @@ class Body extends StatelessWidget {
                   alignment: Alignment.center,
                   margin: const EdgeInsets.all(5),
                   decoration: new BoxDecoration(
-                    color: Color(0xff1f4d7b),
+                    gradient: new LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: new Alignment(1.0, 0.0),
+                      colors: [Color(0xffe7a720), Color(0xffedb540)],
+                    ),
                     borderRadius: new BorderRadius.all(Radius.circular(10.0)),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.search, color: Color(0xff6c8bad), size: 90),
-                      Text('Tra cứu tài sản', style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Color(0xff6c8bad))),
+                      Icon(Icons.search, color: Color(0xff04294f), size: 90),
+                      Text('Tra cứu tài sản', style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Color(0xff04294f))),
                     ],
                   ),
                 ),
