@@ -22,13 +22,18 @@ class _MyAppState extends State<MyApp>{
 
     return Future.value(new AfterSplash());
   }*/
+  @override
+  void didChangeDependencies() {
+    precacheImage(AssetImage("assets/images/bg.png"), context);
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
     return new SplashScreen(
       seconds: 5,
 
-      navigateAfterSeconds: new StartPage(),
+      navigateAfterSeconds: new AfterSplash(),
       // navigateAfterFuture: loadFromFuture(),
       title: new Text(
         'Ứng dụng quản lý tài sản số 1 Việt Nam',
@@ -37,7 +42,7 @@ class _MyAppState extends State<MyApp>{
       image: new Image.asset('assets/images/logo.png'),
       backgroundColor: Color(0xff04294f),
       styleTextUnderTheLoader: new TextStyle(),
-      loadingText: new Text('Đang tải'),
+      loadingText: new Text('Đang tải',style: TextStyle(color: Colors.white),),
       photoSize: 150.0,
       onClick: () => print("Flutter Egypt"),
       loaderColor: Colors.blue,

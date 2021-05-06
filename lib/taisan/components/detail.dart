@@ -13,7 +13,7 @@ class Detail extends StatelessWidget {
       ),
       body: Container(
         color: Color(0xffd1fdfe),
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         child: Column(
           children: [
             Padding(

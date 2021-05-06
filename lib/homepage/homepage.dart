@@ -42,12 +42,15 @@ class _HomePageState extends State<HomePage> {
         title: title(),
         centerTitle: true,
         actions: [
-          IconButton(icon: Icon(Icons.account_circle,size: 30,color:Color(0xff021930)), onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DetailAccount()),
-            );
-          }, )
+          Padding(
+            padding: const EdgeInsets.only(right: 50),
+            child: IconButton(icon: Icon(Icons.account_circle,size: 30,color:Color(0xff021930)), onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DetailAccount()),
+              );
+            }, ),
+          )
         ],
       ),
       body: screen[selectedIndex],

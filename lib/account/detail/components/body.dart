@@ -1,3 +1,5 @@
+import 'package:asset_management/account/detail/components/edit_detail_account.dart';
+import 'package:asset_management/account/detail/components/edit_password_account.dart';
 import 'package:asset_management/qrscanner/qrscanner.dart';
 import 'package:asset_management/taisan/taisan.dart';
 import 'package:flutter/material.dart';
@@ -74,9 +76,14 @@ class Body extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 new Container(
-                  padding: EdgeInsets.symmetric(vertical: 7,horizontal: 20),
-                  color: Color(0xff041629),
-                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+                      primary: Color(0xff041629),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                    ),
                     child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -84,21 +91,44 @@ class Body extends StatelessWidget {
                           Spacer(),
                           Icon(Icons.arrow_right, color: Colors.white, size: 30),
                         ]
-                    )
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EditDetailAccount()),
+                      );
+                    },
+                  ),
+                  color: Color(0xff041629),
+                  width: double.infinity,
                 ),
                 Divider(height: 1.5,color: Color(0xff265180),),
                 new Container(
-                    padding: EdgeInsets.symmetric(vertical: 7,horizontal: 20),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+                      primary: Color(0xff041629),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                    ),
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Thay đổi mật khẩu", style: TextStyle(fontSize: 18,color: Colors.white,height: 1.5)),
+                            Spacer(),
+                            Icon(Icons.arrow_right, color: Colors.white, size: 30),
+                          ]
+                      ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EditPasswordAccount()),
+                      );
+                    },
+                  ),
                     color: Color(0xff041629),
                     width: double.infinity,
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Thay đổi mật khẩu", style: TextStyle(fontSize: 18,color: Colors.white,height: 1.5)),
-                          Spacer(),
-                          Icon(Icons.arrow_right, color: Colors.white, size: 30),
-                        ]
-                    )
                 ),
                 SizedBox(height: 30),
                 new Container(

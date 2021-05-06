@@ -7,7 +7,7 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         color: Color(0xff04294f),
-        padding: EdgeInsets.symmetric(vertical: 25, horizontal: 20),
+        padding: EdgeInsets.symmetric(vertical: 25, horizontal: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
