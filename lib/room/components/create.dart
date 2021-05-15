@@ -34,6 +34,26 @@ class CreateRoom extends StatelessWidget {
                     TextField(
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
+                        hintText: 'Mã phòng...',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        fillColor: Colors.black12,
+                        filled: true,
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: const BorderSide(
+                            color: Colors.transparent,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    TextField(
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
                         hintText: 'Tên phòng...',
                         hintStyle: TextStyle(color: Colors.grey),
                         fillColor: Colors.black12,

@@ -1,10 +1,13 @@
 // @dart=2.9
 import 'package:asset_management/account/start_page.dart';
 import 'package:asset_management/homepage/homepage.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(new MaterialApp(
     home: new MyApp(),
   ));

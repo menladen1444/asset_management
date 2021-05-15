@@ -1,9 +1,54 @@
+// @dart=2.9
+import 'dart:collection';
+
+import 'package:asset_management/model/taisan.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-class Create extends StatelessWidget {
+class Create extends StatefulWidget {
+  @override
+  _CreateState createState() => _CreateState();
+}
+
+class _CreateState extends State<Create> {
+  final fb = FirebaseDatabase.instance;
+
+  List<TaiSan> itemsTaiSan = [];
+
+  TaiSan itemTaiSan;
+
+  DatabaseReference itemRefTaiSan;
+
+  @override
+  void initState() {
+    itemTaiSan = TaiSan("", "", "", "","","");
+    final FirebaseDatabase database = FirebaseDatabase.instance;
+    itemRefTaiSan = database.reference().child('taisans');
+    itemRefTaiSan.onChildAdded.listen(_onEntryAddedShop);
+    itemRefTaiSan.onChildChanged.listen(_onEntryChangedShop);
+    super.initState();
+  }
+
+  _onEntryAddedShop(Event event) {
+    setState(() {
+      itemsTaiSan.add(TaiSan.fromSnapshot(event.snapshot));
+    });
+  }
+
+  _onEntryChangedShop(Event event) {
+    var old = itemsTaiSan.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+    setState(() {
+      itemsTaiSan[itemsTaiSan.indexOf(old)] = TaiSan.fromSnapshot(event.snapshot);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final ref = fb.reference();
     return Scaffold(
       backgroundColor: Color(0xff2b598c),
         body: Column(
@@ -54,7 +99,7 @@ class Create extends StatelessWidget {
                     TextField(
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
-                        hintText: 'Chọn loại tài sản',
+                        hintText: 'Phòng...',
                         hintStyle: TextStyle(color: Colors.grey),
                         fillColor: Colors.black12,
                         filled: true,
@@ -171,12 +216,28 @@ class Create extends StatelessWidget {
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
-                        onPressed: () {
-                          // Respond to button press
+                        onPressed: () async {
+                          String key = ref.child("taisans").push().key;
+                          TaiSan taisan = new TaiSan("tenTaiSan", "ngaySuDung","tinhTrang","serial","khoiLuong","keyPhong");
+                          Map<String, Object> taisanValues = taisan.toMap();
+                          print(taisanValues);
+                          Map<String, Object> childUpdates = new HashMap();
+                          childUpdates["/taisans/" + key] = taisanValues;
+                          ref.update(childUpdates);
                         },
-                        child: Text('TẠO PHÒNG'),
+                        child: Text('TẠO TÀI SẢN'),
                       ),
                     ),
+                    Flexible(
+                        child: FirebaseAnimatedList(
+                            query: itemRefTaiSan.orderByChild("keyPhong").equalTo("keyPhong1"),
+                            itemBuilder: (_, DataSnapshot snapshot,
+                                Animation<double> animation, int index) {
+                              return new ListTile(
+                                title: Text(snapshot.key),
+                                subtitle: Text(itemsTaiSan[index].keyPhong),
+                              );
+                            })),
                   ],
                 ),
               ),
