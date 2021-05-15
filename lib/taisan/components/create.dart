@@ -1,6 +1,7 @@
 // @dart=2.9
 import 'dart:collection';
 
+import 'package:asset_management/model/phong.dart';
 import 'package:asset_management/model/taisan.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -16,34 +17,72 @@ class _CreateState extends State<Create> {
   final fb = FirebaseDatabase.instance;
 
   List<TaiSan> itemsTaiSan = [];
+  List<Phong> itemsPhong = [];
 
   TaiSan itemTaiSan;
+  Phong itemPhong;
+  String _currentSelectedValue;
 
   DatabaseReference itemRefTaiSan;
+  DatabaseReference itemRefPhong;
 
   @override
   void initState() {
     itemTaiSan = TaiSan("", "", "", "","","");
+    itemPhong = Phong("", "");
     final FirebaseDatabase database = FirebaseDatabase.instance;
     itemRefTaiSan = database.reference().child('taisans');
-    itemRefTaiSan.onChildAdded.listen(_onEntryAddedShop);
-    itemRefTaiSan.onChildChanged.listen(_onEntryChangedShop);
+
+    itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
+    itemRefTaiSan.onChildChanged.listen(_onEntryChangedTaiSan);
+
+    itemRefPhong = database.reference().child('phongs');
+
+    itemRefPhong.onChildAdded.listen(_onEntryAddedPhong);
+    itemRefPhong.onChildChanged.listen(_onEntryChangedPhong);
     super.initState();
   }
-
-  _onEntryAddedShop(Event event) {
+  _onEntryAddedTaiSan(Event event) {
+    if (!mounted) return;
     setState(() {
       itemsTaiSan.add(TaiSan.fromSnapshot(event.snapshot));
     });
   }
 
-  _onEntryChangedShop(Event event) {
+  _onEntryChangedTaiSan(Event event) {
     var old = itemsTaiSan.singleWhere((entry) {
       return entry.key == event.snapshot.key;
     });
+    if (!mounted) return;
     setState(() {
       itemsTaiSan[itemsTaiSan.indexOf(old)] = TaiSan.fromSnapshot(event.snapshot);
     });
+  }
+
+  _onEntryAddedPhong(Event event) {
+    if (!mounted) return;
+    setState(() {
+      itemsPhong.add(Phong.fromSnapshot(event.snapshot));
+      _currentSelectedValue = itemsPhong[0].key;
+    });
+  }
+
+  _onEntryChangedPhong(Event event) {
+    var old = itemsPhong.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+    if (!mounted) return;
+    setState(() {
+      itemsPhong[itemsPhong.indexOf(old)] = Phong.fromSnapshot(event.snapshot);
+    });
+  }
+  @override
+  void dispose() {
+    itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan).cancel();
+    itemRefTaiSan.onChildChanged.listen(_onEntryChangedTaiSan).cancel();
+    itemRefPhong.onChildAdded.listen(_onEntryAddedPhong).cancel();
+    itemRefPhong.onChildChanged.listen(_onEntryChangedPhong).cancel();
+    super.dispose();
   }
 
   @override
@@ -94,6 +133,50 @@ class _CreateState extends State<Create> {
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                       ),
+                    ),
+                    SizedBox(height: 20),
+                    FormField<String>(
+                      builder: (FormFieldState<String> state) {
+                        return InputDecorator(
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
+                            fillColor: Colors.black12,
+                            filled: true,
+                            enabledBorder: const OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                              borderSide: const BorderSide(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                          isEmpty: _currentSelectedValue == '',
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              hint: Text("hint"),
+                              iconEnabledColor: Colors.white,
+                              iconDisabledColor: Colors.white,
+                              value: _currentSelectedValue,
+                              isDense: true,
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  _currentSelectedValue = newValue;
+                                  state.didChange(newValue);
+                                });
+                              },
+                              items: itemsPhong.map((Phong phong) {
+                                return DropdownMenuItem<String>(
+                                  value: phong.key,
+                                  child: Text(phong.tenPhong),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 20),
                     TextField(
@@ -218,7 +301,7 @@ class _CreateState extends State<Create> {
                         ),
                         onPressed: () async {
                           String key = ref.child("taisans").push().key;
-                          TaiSan taisan = new TaiSan("tenTaiSan", "ngaySuDung","tinhTrang","serial","khoiLuong","keyPhong");
+                          TaiSan taisan = new TaiSan("tenTaiSan", "ngaySuDung","tinhTrang","serial","khoiLuong",_currentSelectedValue);
                           Map<String, Object> taisanValues = taisan.toMap();
                           print(taisanValues);
                           Map<String, Object> childUpdates = new HashMap();
@@ -228,7 +311,7 @@ class _CreateState extends State<Create> {
                         child: Text('TẠO TÀI SẢN'),
                       ),
                     ),
-                    Flexible(
+                    /*Flexible(
                         child: FirebaseAnimatedList(
                             query: itemRefTaiSan.orderByChild("keyPhong").equalTo("keyPhong1"),
                             itemBuilder: (_, DataSnapshot snapshot,
@@ -237,7 +320,7 @@ class _CreateState extends State<Create> {
                                 title: Text(snapshot.key),
                                 subtitle: Text(itemsTaiSan[index].keyPhong),
                               );
-                            })),
+                            })),*/
                   ],
                 ),
               ),
