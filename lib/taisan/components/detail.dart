@@ -1,8 +1,35 @@
+// @dart=2.9
+import 'package:asset_management/model/taisan.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class Detail extends StatelessWidget {
+class Detail extends StatefulWidget {
+  Detail(this.taiSan);
+  TaiSan taiSan;
+
+  @override
+  _DetailState createState() => _DetailState();
+}
+
+class _DetailState extends State<Detail> {
+  String tenPhong;
+  @override
+  void initState() {
+    tenPhong = '';
+    FirebaseDatabase.instance
+        .reference()
+        .child("phongs")
+        .child(widget.taiSan.keyPhong)
+        .once()
+        .then((DataSnapshot snapshot) {
+        setState(() {
+          tenPhong = snapshot.value["tenPhong"];
+        });
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,43 +60,37 @@ class Detail extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'Máy in tiền',
+                            widget.taiSan.tenTaiSan,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(width: 5),
                           Icon(Icons.room),
-                          Text('Phòng 01')
+                          Text(tenPhong)
                         ],
                       ),
                       Row(
                         children: [
                           Text('Số Serial: '),
-                          Text('01010110101010110101'),
+                          Text(widget.taiSan.serial),
                         ],
                       ),
                       Row(
                         children: [
                           Text('Ngày sử dụng: '),
-                          Text('01/01/1999'),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text('Loại tài sản: '),
-                          Text('Thiết bị gia dụng'),
+                          Text(widget.taiSan.ngaySuDung),
                         ],
                       ),
                       Row(
                         children: [
                           Text('Tình trạng: '),
-                          Text('Còn mới'),
+                          Text(widget.taiSan.tinhTrang),
                         ],
                       ),
                       Row(
                         children: [
                           Text('Khối lượng: '),
-                          Text('100kg'),
+                          Text(widget.taiSan.khoiLuong),
                         ],
                       ),
                     ],

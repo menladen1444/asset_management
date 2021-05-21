@@ -24,29 +24,39 @@ class _BodyState extends State<Body> {
   TaiSan itemTaiSan;
   Phong itemPhong;
 
-  DatabaseReference itemRefTaiSan;
-  DatabaseReference itemRefPhong;
+  Query itemRefTaiSan;
+  Query itemRefPhong;
+
+  Key _key;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
-    itemTaiSan = TaiSan("", "", "", "","","");
+    itemTaiSan = TaiSan("", "", "", "", "", "");
     itemPhong = Phong("", "");
     final FirebaseDatabase database = FirebaseDatabase.instance;
     itemRefTaiSan = database.reference().child('taisans');
 
     itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
     itemRefTaiSan.onChildChanged.listen(_onEntryChangedTaiSan);
+    itemRefTaiSan.onChildRemoved.listen(_onEntryRemovedTaiSan);
 
     itemRefPhong = database.reference().child('phongs');
 
     itemRefPhong.onChildAdded.listen(_onEntryAddedPhong);
     itemRefPhong.onChildChanged.listen(_onEntryChangedPhong);
+    itemRefPhong.onChildRemoved.listen(_onEntryRemovedPhong);
+
+    searchController.addListener(() {
+    });
     super.initState();
   }
+
   _onEntryAddedTaiSan(Event event) {
     if (!mounted) return;
     setState(() {
       itemsTaiSan.add(TaiSan.fromSnapshot(event.snapshot));
+      print(itemsTaiSan.length);
     });
   }
 
@@ -56,7 +66,15 @@ class _BodyState extends State<Body> {
     });
     if (!mounted) return;
     setState(() {
-      itemsTaiSan[itemsTaiSan.indexOf(old)] = TaiSan.fromSnapshot(event.snapshot);
+      itemsTaiSan[itemsTaiSan.indexOf(old)] =
+          TaiSan.fromSnapshot(event.snapshot);
+    });
+  }
+
+  _onEntryRemovedTaiSan(Event event) {
+    if (!mounted) return;
+    setState(() {
+      itemsTaiSan.removeWhere((element) => element.key == event.snapshot.key);
     });
   }
 
@@ -76,11 +94,32 @@ class _BodyState extends State<Body> {
       itemsPhong[itemsPhong.indexOf(old)] = Phong.fromSnapshot(event.snapshot);
     });
   }
+
+  _onEntryRemovedPhong(Event event) {
+    if (!mounted) return;
+    setState(() {
+      itemsPhong.removeWhere((element) => element.key == event.snapshot.key);
+    });
+  }
+
+  @override
+  void dispose() {
+    itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan).cancel();
+    itemRefTaiSan.onChildChanged.listen(_onEntryChangedTaiSan).cancel();
+    itemRefTaiSan.onChildRemoved.listen(_onEntryRemovedTaiSan).cancel();
+    itemRefPhong.onChildAdded.listen(_onEntryAddedPhong).cancel();
+    itemRefPhong.onChildChanged.listen(_onEntryChangedPhong).cancel();
+    itemRefPhong.onChildRemoved.listen(_onEntryRemovedPhong).cancel();
+    searchController.dispose();
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final ref = fb.reference();
     return Container(
-      padding: EdgeInsets.only(top:20,left: 10,right: 10),
+      padding: EdgeInsets.only(top: 20, left: 10, right: 10),
       color: Color(0xff96ccd4),
       child: Column(
         children: [
@@ -88,9 +127,35 @@ class _BodyState extends State<Body> {
             children: [
               Expanded(
                 child: TextField(
+                  onChanged: (value){
+                    setState(() {
+                      if (value == '')
+                        {
+                          itemRefTaiSan = ref.child('taisans');
+                          _key = Key(DateTime
+                              .now()
+                              .millisecondsSinceEpoch
+                              .toString());
+                          itemsTaiSan.clear();
+                          itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
+                        }
+                      else {
+                        itemRefTaiSan = ref.child('taisans').orderByChild(
+                            "tenTaiSan").startAt(value)
+                            .endAt(value + "\uf8ff");
+                        _key = Key(DateTime
+                            .now()
+                            .millisecondsSinceEpoch
+                            .toString());
+                        itemsTaiSan.clear();
+                        itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
+                      }
+                    });
+                  },
+                  controller: searchController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.search),
-                    hintText: 'Nhập mã tài sản...',
+                    hintText: 'Nhập tên tài sản...',
                     hintStyle: TextStyle(color: Colors.white),
                     fillColor: Colors.black12,
                     filled: true,
@@ -134,6 +199,7 @@ class _BodyState extends State<Body> {
           ),
           Flexible(
               child: FirebaseAnimatedList(
+                  key: _key,
                   query: itemRefTaiSan,
                   itemBuilder: (_, DataSnapshot snapshot,
                       Animation<double> animation, int index) {
@@ -141,7 +207,7 @@ class _BodyState extends State<Body> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Detail()),
+                          MaterialPageRoute(builder: (context) => Detail(itemsTaiSan[index])),
                         );
                       },
                       child: Padding(
@@ -152,7 +218,7 @@ class _BodyState extends State<Body> {
                           decoration: new BoxDecoration(
                             color: Color(0xffd1fdfe),
                             borderRadius:
-                            new BorderRadius.all(Radius.circular(5.0)),
+                                new BorderRadius.all(Radius.circular(5.0)),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20),
@@ -169,7 +235,12 @@ class _BodyState extends State<Body> {
                                     ),
                                     SizedBox(width: 5),
                                     Icon(Icons.room),
-                                    Text(itemsPhong.where((element) => element.key.contains(itemsTaiSan[index].keyPhong)).first.tenPhong),
+                                    Text(itemsPhong
+                                        .where((element) => element.key
+                                            .contains(
+                                                itemsTaiSan[index].keyPhong))
+                                        .first
+                                        .tenPhong),
                                   ],
                                 ),
                                 Row(

@@ -26,20 +26,28 @@ class _CreateState extends State<Create> {
   DatabaseReference itemRefTaiSan;
   DatabaseReference itemRefPhong;
 
+  final tenTaiSanController = TextEditingController();
+  final ngaySuDungController = TextEditingController();
+  final tinhTrangController = TextEditingController();
+  final serialController = TextEditingController();
+  final khoiLuongController = TextEditingController();
+
   @override
   void initState() {
-    itemTaiSan = TaiSan("", "", "", "","","");
+    itemTaiSan = TaiSan("", "", "", "", "", "");
     itemPhong = Phong("", "");
     final FirebaseDatabase database = FirebaseDatabase.instance;
     itemRefTaiSan = database.reference().child('taisans');
 
     itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
     itemRefTaiSan.onChildChanged.listen(_onEntryChangedTaiSan);
+    itemRefTaiSan.onChildRemoved.listen(_onEntryRemovedTaiSan);
 
     itemRefPhong = database.reference().child('phongs');
 
     itemRefPhong.onChildAdded.listen(_onEntryAddedPhong);
     itemRefPhong.onChildChanged.listen(_onEntryChangedPhong);
+    itemRefPhong.onChildRemoved.listen(_onEntryRemovedPhong);
     super.initState();
   }
   _onEntryAddedTaiSan(Event event) {
@@ -56,6 +64,13 @@ class _CreateState extends State<Create> {
     if (!mounted) return;
     setState(() {
       itemsTaiSan[itemsTaiSan.indexOf(old)] = TaiSan.fromSnapshot(event.snapshot);
+    });
+  }
+
+  _onEntryRemovedTaiSan(Event event) {
+    if (!mounted) return;
+    setState(() {
+      itemsTaiSan.removeWhere((element) => element.key == event.snapshot.key);
     });
   }
 
@@ -76,12 +91,22 @@ class _CreateState extends State<Create> {
       itemsPhong[itemsPhong.indexOf(old)] = Phong.fromSnapshot(event.snapshot);
     });
   }
+
+  _onEntryRemovedPhong(Event event) {
+    if (!mounted) return;
+    setState(() {
+      itemsPhong.removeWhere((element) => element.key == event.snapshot.key);
+    });
+  }
+
   @override
   void dispose() {
     itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan).cancel();
     itemRefTaiSan.onChildChanged.listen(_onEntryChangedTaiSan).cancel();
+    itemRefTaiSan.onChildRemoved.listen(_onEntryRemovedTaiSan).cancel();
     itemRefPhong.onChildAdded.listen(_onEntryAddedPhong).cancel();
     itemRefPhong.onChildChanged.listen(_onEntryChangedPhong).cancel();
+    itemRefPhong.onChildRemoved.listen(_onEntryRemovedPhong).cancel();
     super.dispose();
   }
 
@@ -116,6 +141,7 @@ class _CreateState extends State<Create> {
                 child: Column(
                   children: [
                     TextField(
+                      controller: tenTaiSanController,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
                         hintText: 'Tên tài sản...',
@@ -156,7 +182,8 @@ class _CreateState extends State<Create> {
                           isEmpty: _currentSelectedValue == '',
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
-                              hint: Text("hint"),
+                              elevation: 24,
+                              style: TextStyle(color: Colors.black),
                               iconEnabledColor: Colors.white,
                               iconDisabledColor: Colors.white,
                               value: _currentSelectedValue,
@@ -180,27 +207,7 @@ class _CreateState extends State<Create> {
                     ),
                     SizedBox(height: 20),
                     TextField(
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
-                        hintText: 'Phòng...',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        fillColor: Colors.black12,
-                        filled: true,
-                        suffixIcon: Icon(Icons.arrow_drop_down),
-                        enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide: const BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide: BorderSide(color: Colors.blue),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    TextField(
+                      controller: ngaySuDungController,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
                         hintText: 'Ngày sử dụng...',
@@ -222,6 +229,7 @@ class _CreateState extends State<Create> {
                     ),
                     SizedBox(height: 20),
                     TextField(
+                      controller: tinhTrangController,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
                         hintText: 'Tình trạng...',
@@ -242,6 +250,7 @@ class _CreateState extends State<Create> {
                     ),
                     SizedBox(height: 20),
                     TextField(
+                      controller: serialController,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
                         hintText: 'Serial...',
@@ -262,6 +271,7 @@ class _CreateState extends State<Create> {
                     ),
                     SizedBox(height: 20),
                     TextField(
+                      controller: khoiLuongController,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
                         hintText: 'Khối lượng...',
@@ -301,9 +311,8 @@ class _CreateState extends State<Create> {
                         ),
                         onPressed: () async {
                           String key = ref.child("taisans").push().key;
-                          TaiSan taisan = new TaiSan("tenTaiSan", "ngaySuDung","tinhTrang","serial","khoiLuong",_currentSelectedValue);
+                          TaiSan taisan = new TaiSan(tenTaiSanController.text, ngaySuDungController.text,tinhTrangController.text,serialController.text,khoiLuongController.text,_currentSelectedValue);
                           Map<String, Object> taisanValues = taisan.toMap();
-                          print(taisanValues);
                           Map<String, Object> childUpdates = new HashMap();
                           childUpdates["/taisans/" + key] = taisanValues;
                           ref.update(childUpdates);
