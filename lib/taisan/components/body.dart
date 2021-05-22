@@ -47,8 +47,6 @@ class _BodyState extends State<Body> {
     itemRefPhong.onChildChanged.listen(_onEntryChangedPhong);
     itemRefPhong.onChildRemoved.listen(_onEntryRemovedPhong);
 
-    searchController.addListener(() {
-    });
     super.initState();
   }
 
@@ -56,7 +54,6 @@ class _BodyState extends State<Body> {
     if (!mounted) return;
     setState(() {
       itemsTaiSan.add(TaiSan.fromSnapshot(event.snapshot));
-      print(itemsTaiSan.length);
     });
   }
 
@@ -71,7 +68,8 @@ class _BodyState extends State<Body> {
     });
   }
 
-  _onEntryRemovedTaiSan(Event event) {
+  _onEntryRemovedTaiSan(Event event) async {
+    await Future.delayed(Duration(milliseconds: 350), () {});
     if (!mounted) return;
     setState(() {
       itemsTaiSan.removeWhere((element) => element.key == event.snapshot.key);
@@ -110,7 +108,6 @@ class _BodyState extends State<Body> {
     itemRefPhong.onChildAdded.listen(_onEntryAddedPhong).cancel();
     itemRefPhong.onChildChanged.listen(_onEntryChangedPhong).cancel();
     itemRefPhong.onChildRemoved.listen(_onEntryRemovedPhong).cancel();
-    searchController.dispose();
     super.dispose();
   }
 

@@ -4,7 +4,6 @@ import 'dart:collection';
 import 'package:asset_management/model/phong.dart';
 import 'package:asset_management/model/taisan.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -316,6 +315,7 @@ class _CreateState extends State<Create> {
                           Map<String, Object> childUpdates = new HashMap();
                           childUpdates["/taisans/" + key] = taisanValues;
                           ref.update(childUpdates);
+                          Navigator.pop(context);
                         },
                         child: Text('TẠO TÀI SẢN'),
                       ),

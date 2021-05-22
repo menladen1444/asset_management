@@ -1,4 +1,6 @@
 // @dart=2.9
+import 'dart:collection';
+
 import 'package:asset_management/model/taisan.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,7 @@ class Detail extends StatefulWidget {
 }
 
 class _DetailState extends State<Detail> {
+  final fb = FirebaseDatabase.instance;
   String tenPhong;
   @override
   void initState() {
@@ -32,6 +35,7 @@ class _DetailState extends State<Detail> {
   }
   @override
   Widget build(BuildContext context) {
+    final ref = fb.reference();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff194370),
@@ -100,7 +104,7 @@ class _DetailState extends State<Detail> {
             ),
             Container(
               child: QrImage(
-                data: "1234567890",
+                data: widget.taiSan.key,
                 version: QrVersions.auto,
                 size: 200.0,
               )
@@ -116,14 +120,23 @@ class _DetailState extends State<Detail> {
               child: Text('Cập nhật thông tin',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Colors.white),),
             ),
             SizedBox(height: 10,),
-            Container(
-              height: 50,
-              alignment: Alignment.center,
-              decoration: new BoxDecoration(
-                color: Colors.redAccent,
-                borderRadius: new BorderRadius.all(Radius.circular(5.0)),
+            GestureDetector(
+              onTap: () {
+                Map<String, Object> childUpdates = new HashMap();
+                childUpdates["/taisans/" + widget.taiSan.key] = null;
+                ref.update(childUpdates);
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Xóa thành công')));
+              },
+              child: Container(
+                height: 50,
+                alignment: Alignment.center,
+                decoration: new BoxDecoration(
+                  color: Colors.redAccent,
+                  borderRadius: new BorderRadius.all(Radius.circular(5.0)),
+                ),
+                child: Text('Xóa',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Colors.white),),
               ),
-              child: Text('Xóa',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Colors.white),),
             ),
           ],
         ),
