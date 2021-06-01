@@ -1,7 +1,26 @@
+// @dart=2.9
+import 'package:asset_management/model/phong.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-class EditPasswordAccount extends StatelessWidget {
+class UpdateRoom extends StatefulWidget {
+  Phong phong;
+  UpdateRoom(this.phong);
+  @override
+  State<StatefulWidget> createState() => new _UpdateRoomState();
+}
+final phongsReference = FirebaseDatabase.instance.reference().child('phongs');
+class _UpdateRoomState extends State<UpdateRoom> {
+  TextEditingController _nameController;
+  TextEditingController _idUserController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = new TextEditingController(text:widget.phong.name);
+    _idUserController = new TextEditingController(text:widget.phong.idUser);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,8 +40,8 @@ class EditPasswordAccount extends StatelessWidget {
               ),
             ),
             Container(
-              child: Text('Cập nhật mật khẩu',
-                style: TextStyle(fontFamily: 'Anton', color: Colors.lightBlueAccent,fontSize: 30,fontWeight:FontWeight.w500),
+              child: Text('CẬP NHẬT',
+                style: TextStyle(fontFamily: 'Anton', color: Colors.lightBlueAccent,fontSize: 35,fontWeight:FontWeight.w500),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -32,59 +51,46 @@ class EditPasswordAccount extends StatelessWidget {
                 child: Column(
                   children: [
                     TextField(
+                      style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold,fontSize: 25),
+                      controller: _nameController,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
-                        hintText: 'Nhập mật khẩu hiện tại',
+                        hintText: 'Nhập tên phòng...',
                         hintStyle: TextStyle(color: Colors.grey),
-                        fillColor: Colors.black12,
+                        fillColor: Colors.black26,
                         filled: true,
                         enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide: const BorderSide(
                             color: Colors.transparent,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
-                    TextField(
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
-                        hintText: 'Nhập mật khẩu mới',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        fillColor: Colors.black12,
-                        filled: true,
-                        enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide: const BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide: BorderSide(color: Colors.blue),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 30),
                     Container(
                       height: 50,
-                      width: double.infinity,
+                      width: 150,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           primary: Color(0xff1e815f),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(35),
                           ),
                         ),
                         onPressed: () {
-                          // Respond to button press
+                          phongsReference.child(widget.phong.id).set({
+                            'idUser': _idUserController.text,
+                            'name': _nameController.text,
+                          }).then((_) {
+                            Navigator.pop(context);
+                          });
                         },
-                        child: Text('Cập nhật'),
+                        child: Text('Lưu thay đổi'),
                       ),
                     ),
                   ],

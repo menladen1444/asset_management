@@ -1,17 +1,19 @@
 import 'package:asset_management/account/detail/detail_account.dart';
 import 'package:asset_management/homepage/components/body.dart';
 import 'package:asset_management/room/room.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
+
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int selectedIndex = 0;
+class HomePageState extends State<HomePage> {
 
+  int selectedIndex = 0;
   void onTapHandler(int index) {
     this.setState(() {
       this.selectedIndex = index;
@@ -24,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   Text title(){
     if (this.selectedIndex == 0)
     {
-      return Text('Asset Management');
+      return Text('Quản lý tài sản');
     }
     else {
       return Text('Danh sách phòng');
@@ -35,6 +37,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Color(0xff04294f),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         iconTheme: IconThemeData(
           color: Color(0xff021930),
         ),
@@ -43,7 +46,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 50),
+            padding: const EdgeInsets.only(right: 10),
             child: IconButton(icon: Icon(Icons.account_circle,size: 30,color:Color(0xff021930)), onPressed: () {
               Navigator.push(
                 context,

@@ -1,6 +1,5 @@
 // @dart=2.9
 import 'dart:collection';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class TaiSan {
@@ -11,15 +10,17 @@ class TaiSan {
   String serial;
   String khoiLuong;
   String keyPhong;
+  String idUser;
 
   TaiSan(String tenTaiSan, String ngaySuDung, String tinhTrang, String serial,
-      String khoiLuong,String keyPhong) {
+      String khoiLuong,String keyPhong,String idUser) {
     this.tenTaiSan = tenTaiSan;
     this.ngaySuDung = ngaySuDung;
     this.tinhTrang = tinhTrang;
     this.serial = serial;
     this.khoiLuong = khoiLuong;
     this.keyPhong = keyPhong;
+    this.idUser = idUser;
   }
   Map<String, Object> toMap() {
     HashMap<String, Object> result = new HashMap();
@@ -29,6 +30,7 @@ class TaiSan {
     result["serial"] = serial;
     result["khoiLuong"] = khoiLuong;
     result["keyPhong"] = keyPhong;
+    result["idUser"] = idUser;
     return result;
   }
 
@@ -39,7 +41,8 @@ class TaiSan {
         tinhTrang = snapshot.value["tinhTrang"],
         serial = snapshot.value["serial"],
         khoiLuong = snapshot.value["khoiLuong"],
-        keyPhong = snapshot.value["keyPhong"];
+        keyPhong = snapshot.value["keyPhong"],
+        idUser = snapshot.value["idUser"];
   toJson() {
     return {
       "tenTaiSan": tenTaiSan,
@@ -48,6 +51,7 @@ class TaiSan {
       "serial": serial,
       "khoiLuong": khoiLuong,
       "keyPhong": keyPhong,
+      "idUser" : idUser,
     };
   }
 }

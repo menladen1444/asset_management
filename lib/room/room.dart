@@ -1,4 +1,6 @@
+// @dart=2.9
 import 'package:asset_management/room/components/body.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,8 +10,10 @@ class Room extends StatefulWidget {
 }
 
 class _RoomState extends State<Room> {
+  FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
-    return Body();
+    String idRoom = _auth.currentUser.uid;
+    return Body(idRoom);
   }
 }

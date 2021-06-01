@@ -6,11 +6,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'create.dart';
 import 'detail.dart';
 
 class Body extends StatefulWidget {
+  Phong phong;
+  Body(this.phong);
   @override
   _BodyState createState() => _BodyState();
 }
@@ -32,10 +33,11 @@ class _BodyState extends State<Body> {
 
   @override
   void initState() {
-    itemTaiSan = TaiSan("", "", "", "", "", "");
-    itemPhong = Phong("", "");
+    itemTaiSan = TaiSan("", "", "", "", "", "","");
+    itemPhong = Phong("", "","");
     final FirebaseDatabase database = FirebaseDatabase.instance;
-    itemRefTaiSan = database.reference().child('taisans');
+    String idPhong = widget.phong.id;
+    itemRefTaiSan = database.reference().child('taisans').orderByChild('keyPhong').equalTo('$idPhong');
 
     itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
     itemRefTaiSan.onChildChanged.listen(_onEntryChangedTaiSan);
@@ -85,7 +87,7 @@ class _BodyState extends State<Body> {
 
   _onEntryChangedPhong(Event event) {
     var old = itemsPhong.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
+      return entry.id == event.snapshot.key;
     });
     if (!mounted) return;
     setState(() {
@@ -96,7 +98,7 @@ class _BodyState extends State<Body> {
   _onEntryRemovedPhong(Event event) {
     if (!mounted) return;
     setState(() {
-      itemsPhong.removeWhere((element) => element.key == event.snapshot.key);
+      itemsPhong.removeWhere((element) => element.id == event.snapshot.key);
     });
   }
 
@@ -111,13 +113,12 @@ class _BodyState extends State<Body> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final ref = fb.reference();
     return Container(
       padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-      color: Color(0xff96ccd4),
+      color: Color(0xff6298a0),
       child: Column(
         children: [
           Row(
@@ -127,15 +128,15 @@ class _BodyState extends State<Body> {
                   onChanged: (value){
                     setState(() {
                       if (value == '')
-                        {
-                          itemRefTaiSan = ref.child('taisans');
-                          _key = Key(DateTime
-                              .now()
-                              .millisecondsSinceEpoch
-                              .toString());
-                          itemsTaiSan.clear();
-                          itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
-                        }
+                      {
+                        itemRefTaiSan = ref.child('taisans');
+                        _key = Key(DateTime
+                            .now()
+                            .millisecondsSinceEpoch
+                            .toString());
+                        itemsTaiSan.clear();
+                        itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
+                      }
                       else {
                         itemRefTaiSan = ref.child('taisans').orderByChild(
                             "tenTaiSan").startAt(value)
@@ -184,7 +185,7 @@ class _BodyState extends State<Body> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Create()),
+                      MaterialPageRoute(builder: (context) => Create(widget.phong)),
                     );
                   },
                 ),
@@ -215,7 +216,7 @@ class _BodyState extends State<Body> {
                           decoration: new BoxDecoration(
                             color: Color(0xffd1fdfe),
                             borderRadius:
-                                new BorderRadius.all(Radius.circular(5.0)),
+                            new BorderRadius.all(Radius.circular(5.0)),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20),
@@ -231,13 +232,13 @@ class _BodyState extends State<Body> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(width: 5),
-                                    Icon(Icons.room),
+                                    Icon(Icons.room,color:Colors.blueAccent ,),
                                     Text(itemsPhong
-                                        .where((element) => element.key
-                                            .contains(
-                                                itemsTaiSan[index].keyPhong))
+                                        .where((element) => element.id
+                                        .contains(
+                                        itemsTaiSan[index].keyPhong))
                                         .first
-                                        .tenPhong),
+                                        .name,style: TextStyle(color: Colors.blueAccent,fontWeight: FontWeight.bold,fontSize: 20)),
                                   ],
                                 ),
                                 Row(

@@ -1,11 +1,19 @@
 // @dart=2.9
 import 'dart:collection';
 
-import 'package:asset_management/model/taisan.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui';
+import 'dart:io';
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:asset_management/model/taisan.dart';
+import 'package:asset_management/taisan/components/update.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 
 class Detail extends StatefulWidget {
   Detail(this.taiSan);
@@ -14,28 +22,37 @@ class Detail extends StatefulWidget {
   @override
   _DetailState createState() => _DetailState();
 }
-
+final taisansReference = FirebaseDatabase.instance.reference().child('taisans');
 class _DetailState extends State<Detail> {
+  List<TaiSan> taisans;
+  TaiSan taisanhientai;
+  StreamSubscription<Event> _onTaiSanAddedSubscription;
+  StreamSubscription<Event> _onTaiSanChangedSubscription;
   final fb = FirebaseDatabase.instance;
-  String tenPhong;
+  String name = '';
   @override
   void initState() {
-    tenPhong = '';
-    FirebaseDatabase.instance
-        .reference()
-        .child("phongs")
-        .child(widget.taiSan.keyPhong)
-        .once()
-        .then((DataSnapshot snapshot) {
-        setState(() {
-          tenPhong = snapshot.value["tenPhong"];
-        });
-    });
+    taisans = new List();
+    _onTaiSanAddedSubscription = taisansReference.onChildAdded.listen(_onTaiSanAdded);
+    _onTaiSanChangedSubscription = taisansReference.onChildChanged.listen(_onTaiSanUpdated);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final ref = fb.reference();
+    for(var i = 0;i< taisans.length;i++)
+    {
+      if(taisans[i].key.contains(widget.taiSan.key))
+      {
+        taisanhientai = taisans[i];
+      }
+    }
+    FirebaseDatabase.instance.reference().child("phongs").child(taisanhientai.keyPhong).once().then((DataSnapshot snapshot) {
+      setState(() {
+        name = snapshot.value["name"];
+      });
+    });
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff194370),
@@ -64,37 +81,38 @@ class _DetailState extends State<Detail> {
                       Row(
                         children: [
                           Text(
-                            widget.taiSan.tenTaiSan,
+                            taisanhientai.tenTaiSan,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(width: 5),
-                          Icon(Icons.room),
-                          Text(tenPhong)
+                          Icon(Icons.room,color:Colors.blueAccent ,),
+                          Text(name,style: TextStyle(color: Colors.blueAccent,fontWeight: FontWeight.bold,fontSize: 20),)
                         ],
                       ),
                       Row(
                         children: [
                           Text('Số Serial: '),
-                          Text(widget.taiSan.serial),
+                          Text(taisanhientai.serial,style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
                       Row(
                         children: [
                           Text('Ngày sử dụng: '),
-                          Text(widget.taiSan.ngaySuDung),
+                          Text(taisanhientai.ngaySuDung,style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
                       Row(
                         children: [
                           Text('Tình trạng: '),
-                          Text(widget.taiSan.tinhTrang),
+                          Text(taisanhientai.tinhTrang,style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
                       Row(
                         children: [
                           Text('Khối lượng: '),
-                          Text(widget.taiSan.khoiLuong),
+                          Text(taisanhientai.khoiLuong,style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(' kg',style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ],
@@ -103,27 +121,35 @@ class _DetailState extends State<Detail> {
               ),
             ),
             Container(
-              child: QrImage(
-                data: widget.taiSan.key,
-                version: QrVersions.auto,
-                size: 200.0,
-              )
+                child: QrImage(
+                  data: taisanhientai.key,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                )
             ),
-            Container(
-              height: 50,
-              margin: const EdgeInsets.only(top:15.0),
-              alignment: Alignment.center,
-              decoration: new BoxDecoration(
-                color: Color(0xff303c6c),
-                borderRadius: new BorderRadius.all(Radius.circular(5.0)),
+            SizedBox(height: 20,),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UpdateTaiSan(taisanhientai)),
+                );
+              },
+              child: Container(
+                height: 50,
+                alignment: Alignment.center,
+                decoration: new BoxDecoration(
+                  color: Color(0xff303c6c),
+                  borderRadius: new BorderRadius.all(Radius.circular(5.0)),
+                ),
+                child: Text('Cập nhật thông tin',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Colors.white),),
               ),
-              child: Text('Cập nhật thông tin',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Colors.white),),
             ),
             SizedBox(height: 10,),
             GestureDetector(
               onTap: () {
                 Map<String, Object> childUpdates = new HashMap();
-                childUpdates["/taisans/" + widget.taiSan.key] = null;
+                childUpdates["/taisans/" + taisanhientai.key] = null;
                 ref.update(childUpdates);
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Xóa thành công')));
@@ -142,5 +168,16 @@ class _DetailState extends State<Detail> {
         ),
       ),
     );
+  }
+  void _onTaiSanAdded(Event event) {
+    setState(() {
+      taisans.add(new TaiSan.fromSnapshot(event.snapshot));
+    });
+  }
+  void _onTaiSanUpdated(Event event) {
+    var oldTaiSanValue = taisans.singleWhere((taisan) => taisan.key == event.snapshot.key);
+    setState(() {
+      taisans[taisans.indexOf(oldTaiSanValue)] = new TaiSan.fromSnapshot(event.snapshot);
+    });
   }
 }

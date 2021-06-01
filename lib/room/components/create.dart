@@ -1,9 +1,30 @@
+// @dart=2.9
+import 'package:asset_management/room/components/body.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'dart:async';
 
-class CreateRoom extends StatelessWidget {
+class CreateRoom extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => new _CreateRoomState();
+}
+final phongsReference = FirebaseDatabase.instance.reference().child('phongs');
+class _CreateRoomState extends State<CreateRoom> {
+  TextEditingController _nameController;
+  TextEditingController _idUserController;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = new TextEditingController(text:'');
+    _idUserController = new TextEditingController(text: '');
+  }
   @override
   Widget build(BuildContext context) {
+    String uid = _auth.currentUser.uid;
     return Scaffold(
         backgroundColor: Color(0xff2b598c),
         body: Column(
@@ -22,7 +43,7 @@ class CreateRoom extends StatelessWidget {
             ),
             Container(
               child: Text('THÊM PHÒNG MỚI',
-                style: TextStyle(fontFamily: 'Anton', color: Colors.lightBlueAccent,fontSize: 40,fontWeight:FontWeight.w500),
+                style: TextStyle(fontFamily: 'Anton', color: Colors.lightBlueAccent,fontSize: 35,fontWeight:FontWeight.w500),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -32,57 +53,44 @@ class CreateRoom extends StatelessWidget {
                 child: Column(
                   children: [
                     TextField(
+                      style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold,fontSize: 25),
+                      controller: _nameController,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
-                        hintText: 'Mã phòng...',
+                        hintText: 'Nhập tên phòng...',
                         hintStyle: TextStyle(color: Colors.grey),
-                        fillColor: Colors.black12,
+                        fillColor: Colors.black26,
                         filled: true,
                         enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide: const BorderSide(
                             color: Colors.transparent,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    TextField(
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 15.0),
-                        hintText: 'Tên phòng...',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        fillColor: Colors.black12,
-                        filled: true,
-                        enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide: const BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide: BorderSide(color: Colors.blue),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 30),
                     Container(
                       height: 50,
-                      width: double.infinity,
+                      width: 150,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           primary: Color(0xff1e815f),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(35),
                           ),
                         ),
                         onPressed: () {
-                          // Respond to button press
+                          phongsReference.push().set({
+                            'name': _nameController.text,
+                            'idUser': uid
+                          }).then((_) {
+                            Navigator.pop(context);
+                          });
                         },
                         child: Text('TẠO PHÒNG'),
                       ),

@@ -1,6 +1,5 @@
 // @dart=2.9
 import 'package:asset_management/account/start_page.dart';
-import 'package:asset_management/homepage/homepage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:flutter/material.dart';
@@ -34,10 +33,8 @@ class _MyAppState extends State<MyApp>{
   @override
   Widget build(BuildContext context) {
     return new SplashScreen(
-      seconds: 5,
-
+      seconds: 3,
       navigateAfterSeconds: new AfterSplash(),
-      // navigateAfterFuture: loadFromFuture(),
       title: new Text(
         'Ứng dụng quản lý tài sản số 1 Việt Nam',
         style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0,color: Color(0xff94b4c4)),
@@ -69,8 +66,6 @@ class _MyAppState extends State<MyApp>{
     );
   }
 }
-
-
 
 class AfterSplash extends StatelessWidget {
   @override

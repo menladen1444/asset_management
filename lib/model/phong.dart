@@ -1,33 +1,24 @@
 // @dart=2.9
-import 'dart:collection';
-import 'package:asset_management/model/taisan.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class Phong {
-  String key;
-  String maPhong;
-  String tenPhong;
+  String _id;
+  String _name;
+  String _idUser;
 
-  Phong(String maPhong, String tenPhong) {
-    this.maPhong = maPhong;
-    this.tenPhong = tenPhong;
+  Phong(this._id, this._name, this._idUser);
+  Phong.map(dynamic obj) {
+    this._id = obj['id'];
+    this._name = obj['name'];
+    this._idUser = obj['idUser'];
   }
-  Map<String, Object> toMap() {
-    HashMap<String, Object> result = new HashMap();
-    result["maPhong"] = maPhong;
-    result["tenPhong"] = tenPhong;
-    return result;
-  }
+  String get id => _id;
+  String get name => _name;
+  String get idUser => _idUser;
 
-  Phong.fromSnapshot(DataSnapshot snapshot)
-      : key = snapshot.key,
-        maPhong = snapshot.value["maPhong"],
-        tenPhong = snapshot.value["tenPhong"];
-  toJson() {
-    return {
-      "maPhong": maPhong,
-      "tenPhong": tenPhong,
-    };
+  Phong.fromSnapshot(DataSnapshot snapshot) {
+    _id = snapshot.key;
+    _name = snapshot.value['name'];
+    _idUser = snapshot.value['idUser'];
   }
 }

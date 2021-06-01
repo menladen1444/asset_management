@@ -1,8 +1,7 @@
 // @dart=2.9
 import 'dart:io';
-
+import 'package:asset_management/homepage/components/TimKiemTaiSan.dart';
 import 'package:asset_management/qrscanner/qrscanner.dart';
-import 'package:asset_management/taisan/taisan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
@@ -60,26 +59,31 @@ class _BodyState extends State<Body> {
                   alignment: Alignment.center,
                   margin: const EdgeInsets.all(5),
                   decoration: new BoxDecoration(
+                    border: Border.all(
+                      color: Color(0xff4672a8),
+                      width: 4,
+                    ),
                     gradient: new LinearGradient(
                       begin: Alignment.centerLeft,
                       end: new Alignment(1.0, 0.0),
-                      colors: [Color(0xffe7a720), Color(0xffedb540)],
+                      colors: [Color(0xff021a2e), Color(0xff021a2e)],
                     ),
                     borderRadius: new BorderRadius.all(Radius.circular(10.0)),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.image, color: Color(0xff04294f), size: 90),
+                      Icon(Icons.image, color: Color(0xff4672a8), size: 90),
                       Text(
                         'Quét mã từ thư viện ảnh',
-                        style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Color(0xff04294f)),
+                        style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Color(0xff4672a8)),
                       ),
                     ],
                   ),
                 ),
               ),
             ),
+            SizedBox(height: 10,),
             Expanded(
               child: GestureDetector(
                 onTap: (){
@@ -89,10 +93,14 @@ class _BodyState extends State<Body> {
                   alignment: Alignment.center,
                   margin: const EdgeInsets.all(5),
                   decoration: new BoxDecoration(
+                    border: Border.all(
+                      color: Color(0xff4672a8),
+                      width: 4,
+                    ),
                     gradient: new LinearGradient(
                       begin: Alignment.centerLeft,
                       end: new Alignment(1.0, 0.0),
-                      colors: [Color(0xffe7a720), Color(0xffedb540)],
+                      colors: [Color(0xff021a2e), Color(0xff021a2e)],
                     ),
                     borderRadius: new BorderRadius.all(Radius.circular(10.0)),
                   ),
@@ -100,24 +108,26 @@ class _BodyState extends State<Body> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.qr_code_scanner,
-                          color: Color(0xff04294f), size: 90),
-                      Text('Quét mã QR', style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Color(0xff04294f))),
+                          color: Color(0xff4672a8), size: 90),
+                      Text('Quét mã QR', style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Color(0xff4672a8))),
                     ],
                   ),
                 ),
               ),
             ),
-            Expanded(
+            SizedBox(height: 10,),
+            Container(
               child: GestureDetector(
                 onTap: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => TaiSan(title: 'Tìm kiếm tài sản')),
+                    MaterialPageRoute(builder: (context) => TimKiemTaiSan()),
                   );
                 },
                 child: Container(
+                  height: 70,
                   alignment: Alignment.center,
-                  margin: const EdgeInsets.all(5),
+                  margin: const EdgeInsets.only(left: 5,right: 5,top: 10,bottom: 0),
                   decoration: new BoxDecoration(
                     gradient: new LinearGradient(
                       begin: Alignment.centerLeft,
@@ -126,11 +136,11 @@ class _BodyState extends State<Body> {
                     ),
                     borderRadius: new BorderRadius.all(Radius.circular(10.0)),
                   ),
-                  child: Column(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.search, color: Color(0xff04294f), size: 90),
-                      Text('Tra cứu tài sản', style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Color(0xff04294f))),
+                      Icon(Icons.search, color: Color(0xff04294f), size: 50),
+                      Text(' Tìm kiếm tất cả tài sản', style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Color(0xff04294f))),
                     ],
                   ),
                 ),

@@ -8,14 +8,14 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-class Create extends StatefulWidget {
-  Phong phong;
-  Create(this.phong);
+class UpdateTaiSan extends StatefulWidget {
+  TaiSan taisan;
+  UpdateTaiSan(this.taisan);
   @override
   _CreateState createState() => _CreateState();
 }
-
-class _CreateState extends State<Create> {
+final taisansReference = FirebaseDatabase.instance.reference().child('taisans');
+class _CreateState extends State<UpdateTaiSan> {
   final fb = FirebaseDatabase.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -29,12 +29,13 @@ class _CreateState extends State<Create> {
   DatabaseReference itemRefTaiSan;
   DatabaseReference itemRefPhong;
 
-  final tenTaiSanController = TextEditingController();
-  final ngaySuDungController = TextEditingController();
-  final tinhTrangController = TextEditingController();
-  final serialController = TextEditingController();
-  final khoiLuongController = TextEditingController();
+  var tenTaiSanController = TextEditingController();
+  var ngaySuDungController = TextEditingController();
+  var tinhTrangController = TextEditingController();
+  var serialController = TextEditingController();
+  var khoiLuongController = TextEditingController();
   var idUserController = TextEditingController();
+  var keyPhongController = TextEditingController();
 
   @override
   void initState() {
@@ -46,6 +47,14 @@ class _CreateState extends State<Create> {
     itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
     itemRefTaiSan.onChildChanged.listen(_onEntryChangedTaiSan);
     itemRefTaiSan.onChildRemoved.listen(_onEntryRemovedTaiSan);
+
+    tenTaiSanController = new TextEditingController(text:widget.taisan.tenTaiSan);
+    ngaySuDungController = new TextEditingController(text:widget.taisan.ngaySuDung);
+    tinhTrangController = new TextEditingController(text:widget.taisan.tinhTrang);
+    serialController = new TextEditingController(text:widget.taisan.serial);
+    khoiLuongController = new TextEditingController(text:widget.taisan.khoiLuong);
+    keyPhongController = new TextEditingController(text:widget.taisan.keyPhong);
+    idUserController = new TextEditingController(text: widget.taisan.idUser);
 
     User _user = _auth.currentUser;
     String id = _user.uid;
@@ -83,7 +92,7 @@ class _CreateState extends State<Create> {
     if (!mounted) return;
     setState(() {
       itemsPhong.add(Phong.fromSnapshot(event.snapshot));
-      _currentSelectedValue = widget.phong.id;
+      _currentSelectedValue = widget.taisan.keyPhong;
     });
   }
 
@@ -122,7 +131,7 @@ class _CreateState extends State<Create> {
     return Scaffold(
         backgroundColor: Color(0xff2b598c),
         body: Container(
-          padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             decoration: new BoxDecoration(
             ),
             child: SingleChildScrollView(
@@ -310,21 +319,25 @@ class _CreateState extends State<Create> {
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                                primary: Colors.green,
+                                primary: Color(0xffd9902b),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                               ),
                               onPressed: () async {
-                                String key = ref.child("taisans").push().key;
-                                TaiSan taisan = new TaiSan(tenTaiSanController.text, ngaySuDungController.text,tinhTrangController.text,serialController.text,khoiLuongController.text,_currentSelectedValue,_user.uid);
-                                Map<String, Object> taisanValues = taisan.toMap();
-                                Map<String, Object> childUpdates = new HashMap();
-                                childUpdates["/taisans/" + key] = taisanValues;
-                                ref.update(childUpdates);
-                                Navigator.pop(context);
+                                taisansReference.child(widget.taisan.key).set({
+                                  'keyPhong': _currentSelectedValue,
+                                  'khoiLuong': khoiLuongController.text,
+                                  'ngaySuDung': ngaySuDungController.text,
+                                  'serial': serialController.text,
+                                  'tenTaiSan': tenTaiSanController.text,
+                                  'tinhTrang': tinhTrangController.text,
+                                  'idUser': idUserController.text,
+                                }).then((_) {
+                                  Navigator.pop(context);
+                                });
                               },
-                              child: Text('Tạo mới',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black)),
+                              child: Text('Lưu thay đổi',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black)),
                             ),
                             decoration: BoxDecoration(
                               border: Border(
