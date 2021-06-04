@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:asset_management/account/components/UpdateAccount.dart';
 import 'package:asset_management/account/start_page.dart';
+import 'package:asset_management/model/taisan.dart';
 import 'package:asset_management/model/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -22,16 +23,24 @@ class _BodyDetail extends State<DetailAccount> {
 
   final fb = FirebaseDatabase.instance;
   List<UserAccount> items;
+  List<TaiSan> taisans;
   UserAccount userLogin;
   StreamSubscription<Event> _onUserAddedSubscription;
   StreamSubscription<Event> _onUserChangedSubscription;
+  StreamSubscription<Event> _onTaiSanAddedSubscription;
+  StreamSubscription<Event> _onTaiSanChangedSubscription;
 
   @override
   void initState() {
     super.initState();
     items = new List();
+    taisans = new List();
+    String id = _auth.currentUser.uid;
+    final taisansReference = FirebaseDatabase.instance.reference().child('taisans').orderByChild("idUser").equalTo('$id');
     _onUserAddedSubscription = usersReference.onChildAdded.listen(_onUserAdded);
     _onUserChangedSubscription = usersReference.onChildChanged.listen(_onUserUpdated);
+    _onTaiSanAddedSubscription = taisansReference.onChildAdded.listen(_onTaiSanAdded);
+    _onTaiSanChangedSubscription = taisansReference.onChildChanged.listen(_onTaiSanUpdated);
 
   }
 
@@ -54,6 +63,7 @@ class _BodyDetail extends State<DetailAccount> {
         userLogin = items[i];
       }
     }
+    int soLuong = taisans.length;
     return new Scaffold(
         backgroundColor: Color(0xff04294f),
         appBar: AppBar(
@@ -90,7 +100,7 @@ class _BodyDetail extends State<DetailAccount> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(userLogin.name, style: TextStyle(fontSize: 20,color: Colors.white)),
-                                    Text("Có tổng cộng 200 tài sản", style: TextStyle(fontSize: 13,color: Colors.white54,height: 1.7))
+                                    Text("Có tổng cộng $soLuong tài sản", style: TextStyle(fontSize: 13,color: Colors.white54,height: 1.7))
                                   ]
                               ),
                             ),
@@ -206,6 +216,17 @@ class _BodyDetail extends State<DetailAccount> {
     var oldUserValue = items.singleWhere((user) => user.id == event.snapshot.key);
     setState(() {
       items[items.indexOf(oldUserValue)] = new UserAccount.fromSnapshot(event.snapshot);
+    });
+  }
+  void _onTaiSanAdded(Event event) {
+    setState(() {
+      taisans.add(new TaiSan.fromSnapshot(event.snapshot));
+    });
+  }
+  void _onTaiSanUpdated(Event event) {
+    var oldTaiSanValue = taisans.singleWhere((taisan) => taisan.key == event.snapshot.key);
+    setState(() {
+      taisans[taisans.indexOf(oldTaiSanValue)] = new TaiSan.fromSnapshot(event.snapshot);
     });
   }
 }

@@ -151,7 +151,7 @@ class _CreateState extends State<UpdateTaiSan> {
                     ),
                   ),
                   Container(
-                    child: Text('THÊM TÀI SẢN MỚI',
+                    child: Text('CẬP NHẬT',
                       style: TextStyle(fontFamily: 'Anton', color: Colors.lightBlueAccent,fontSize: 30,fontWeight:FontWeight.w500),
                       textAlign: TextAlign.center,
                     ),

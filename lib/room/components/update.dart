@@ -29,7 +29,7 @@ class _UpdateRoomState extends State<UpdateRoom> {
           children: [
             Container(
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(top: 40.0, bottom: 10.0,left:5.0),
+              padding: const EdgeInsets.only(top: 40.0, bottom: 60.0,left:5.0),
               child: IconButton(
                 icon: const Icon(Icons.arrow_back_sharp),
                 color: Colors.black,
@@ -73,11 +73,12 @@ class _UpdateRoomState extends State<UpdateRoom> {
                     ),
                     SizedBox(height: 30),
                     Container(
-                      height: 50,
+                      height: 45,
                       width: 150,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Color(0xff1e815f),
+                          side: BorderSide(width: 2.0, color: Color(0xff102f50),),
+                          primary: Color(0xffe6a821),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(35),
                           ),
@@ -90,7 +91,18 @@ class _UpdateRoomState extends State<UpdateRoom> {
                             Navigator.pop(context);
                           });
                         },
-                        child: Text('Lưu thay đổi'),
+                        child: Row(
+                          children: [
+                            Container(
+                              child:Icon(Icons.save,size: 30,color: Color(0xff102f50),),
+                              decoration: BoxDecoration(
+
+                              ),
+                            ),
+
+                            Text(' Lưu cập nhật',style: TextStyle(fontWeight: FontWeight.bold,color: Color(0xff102f50))),
+                          ],
+                        ),
                       ),
                     ),
                   ],

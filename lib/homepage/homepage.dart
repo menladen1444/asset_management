@@ -1,18 +1,47 @@
+// @dart=2.9
+import 'dart:async';
+import 'dart:ui';
 import 'package:asset_management/account/detail/detail_account.dart';
 import 'package:asset_management/homepage/components/body.dart';
+import 'package:asset_management/model/user.dart';
 import 'package:asset_management/room/room.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class HomePage extends StatefulWidget {
-
   @override
   HomePageState createState() => HomePageState();
 }
+final usersReference = FirebaseDatabase.instance.reference().child('users');
 
 class HomePageState extends State<HomePage> {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  FacebookLogin facebookLogin = FacebookLogin();
 
+  final fb = FirebaseDatabase.instance;
+  List<UserAccount> items;
+  UserAccount userLogin;
+  StreamSubscription<Event> _onUserAddedSubscription;
+  StreamSubscription<Event> _onUserChangedSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    items = new List();
+    _onUserAddedSubscription = usersReference.onChildAdded.listen(_onUserAdded);
+    _onUserChangedSubscription = usersReference.onChildChanged.listen(_onUserUpdated);
+
+  }
+
+  @override
+  void dispose() {
+    _onUserAddedSubscription.cancel();
+    _onUserChangedSubscription.cancel();
+    super.dispose();
+  }
   int selectedIndex = 0;
   void onTapHandler(int index) {
     this.setState(() {
@@ -34,6 +63,14 @@ class HomePageState extends State<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
+    User _user = _auth.currentUser;
+    for(var i = 0;i< items.length;i++)
+    {
+      if(items[i].idFacebook.contains(_user.uid))
+      {
+        userLogin = items[i];
+      }
+    }
     return Scaffold(
       backgroundColor: Color(0xff04294f),
       appBar: AppBar(
@@ -47,12 +84,21 @@ class HomePageState extends State<HomePage> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
-            child: IconButton(icon: Icon(Icons.account_circle,size: 30,color:Color(0xff021930)), onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DetailAccount()),
-              );
-            }, ),
+            child: MaterialButton(
+                onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DetailAccount()),
+                );
+              },
+              color: Color(0xff194370),
+              minWidth: 15,
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(userLogin.avatar),
+                radius: 18,
+              ),
+              shape: CircleBorder(),
+            ),
           )
         ],
       ),
@@ -78,6 +124,18 @@ class HomePageState extends State<HomePage> {
         },
       ),
     );
+  }
+  void _onUserAdded(Event event) {
+    setState(() {
+      items.add(new UserAccount.fromSnapshot(event.snapshot));
+    });
+  }
+
+  void _onUserUpdated(Event event) {
+    var oldUserValue = items.singleWhere((user) => user.id == event.snapshot.key);
+    setState(() {
+      items[items.indexOf(oldUserValue)] = new UserAccount.fromSnapshot(event.snapshot);
+    });
   }
 }
 
