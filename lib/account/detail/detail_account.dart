@@ -33,8 +33,8 @@ class _BodyDetail extends State<DetailAccount> {
   @override
   void initState() {
     super.initState();
-    items = new List();
-    taisans = new List();
+    items = [];
+    taisans = [];
     String id = _auth.currentUser.uid;
     final taisansReference = FirebaseDatabase.instance.reference().child('taisans').orderByChild("idUser").equalTo('$id');
     _onUserAddedSubscription = usersReference.onChildAdded.listen(_onUserAdded);
@@ -48,6 +48,8 @@ class _BodyDetail extends State<DetailAccount> {
   void dispose() {
     _onUserAddedSubscription.cancel();
     _onUserChangedSubscription.cancel();
+    _onTaiSanAddedSubscription.cancel();
+    _onTaiSanChangedSubscription.cancel();
     super.dispose();
   }
   @override
@@ -92,7 +94,7 @@ class _BodyDetail extends State<DetailAccount> {
                                 foregroundColor: Colors.blue,
                               ),
                               padding: EdgeInsets.all(1),
-                              shape: CircleBorder(),
+                              shape: CircleBorder(), onPressed: () {  },
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 16,vertical: 3),

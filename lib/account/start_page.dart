@@ -28,7 +28,7 @@ class _Login extends State<StartPage> {
   @override
   void initState() {
     super.initState();
-    items = new List();
+    items = [];
     _onUserAddedSubscription = usersReference.onChildAdded.listen(_onUserAdded);
     _onUserChangedSubscription = usersReference.onChildChanged.listen(_onUserUpdated);
     CheckLogin();

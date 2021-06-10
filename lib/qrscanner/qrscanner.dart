@@ -28,7 +28,7 @@ class _QRScannerState extends State<QRScanner> {
   @override
   void initState() {
     super.initState();
-    taisans = new List();
+    taisans = [];
     String idUser = _auth.currentUser.uid;
     final taisansReference = FirebaseDatabase.instance.reference().child('taisans').orderByChild('idUser').equalTo('$idUser');
     _onTaiSanAddedSubscription = taisansReference.onChildAdded.listen(_onTaiSanAdded);
@@ -339,6 +339,8 @@ class _QRScannerState extends State<QRScanner> {
   @override
   void dispose() {
     controller?.dispose();
+    _onTaiSanAddedSubscription.cancel();
+    _onTaiSanChangedSubscription.cancel();
     super.dispose();
   }
   void _onTaiSanAdded(Event event) {

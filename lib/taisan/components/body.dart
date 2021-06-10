@@ -129,7 +129,7 @@ class _BodyState extends State<Body> {
                     setState(() {
                       if (value == '')
                       {
-                        itemRefTaiSan = ref.child('taisans');
+                        itemRefTaiSan = ref.child('taisans').orderByChild('keyPhong').equalTo(widget.phong.id);
                         _key = Key(DateTime
                             .now()
                             .millisecondsSinceEpoch

@@ -11,44 +11,57 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class Body extends StatefulWidget {
-  String idRoom;
+  final String idRoom;
   Body(this.idRoom);
   @override
   _ListViewPhongState createState() => new _ListViewPhongState();
 }
 final roomsReference = FirebaseDatabase.instance.reference().child('phongs');
-final taisansReference = FirebaseDatabase.instance.reference().child('taisans');
-class _ListViewPhongState extends State<Body> {
-  List<Phong> items;
-  List<TaiSan> taisans;
 
-  StreamSubscription<Event> _onPhongAddedSubscription;
-  StreamSubscription<Event> _onPhongChangedSubscription;
-  StreamSubscription<Event> _onTaiSanAddedSubscription;
-  StreamSubscription<Event> _onTaiSanChangedSubscription;
+class _ListViewPhongState extends State<Body> {
+  final fb = FirebaseDatabase.instance;
+
+  List<TaiSan> itemsTaiSan = [];
+  List<Phong> itemsPhong = [];
+
+  Query itemRefTaiSan;
+  Query itemRefPhong;
+
+  Key _key;
   @override
   void initState() {
-    super.initState();
-    items = new List();
-    taisans = new List();
+    itemsPhong = [];
+    itemsTaiSan = [];
     String id = widget.idRoom;
-    final phongsReference = FirebaseDatabase.instance.reference().child('phongs').orderByChild("idUser").equalTo('$id');
-    _onPhongAddedSubscription = phongsReference.onChildAdded.listen(_onPhongAdded);
-    _onPhongChangedSubscription = phongsReference.onChildChanged.listen(_onPhongUpdated);
-    _onTaiSanAddedSubscription = taisansReference.onChildAdded.listen(_onTaiSanAdded);
-    _onTaiSanChangedSubscription = taisansReference.onChildChanged.listen(_onTaiSanUpdated);
+    final FirebaseDatabase database = FirebaseDatabase.instance;
+
+    itemRefTaiSan = database.reference().child('taisans');
+
+    itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
+    itemRefTaiSan.onChildChanged.listen(_onEntryChangedTaiSan);
+    itemRefTaiSan.onChildRemoved.listen(_onEntryRemovedTaiSan);
+
+    itemRefPhong = database.reference().child('phongs').orderByChild("idUser").equalTo('$id');
+
+    itemRefPhong.onChildAdded.listen(_onEntryAddedPhong);
+    itemRefPhong.onChildChanged.listen(_onEntryChangedPhong);
+    super.initState();
   }
 
   @override
   void dispose() {
-    _onPhongAddedSubscription.cancel();
-    _onPhongChangedSubscription.cancel();
+    itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan).cancel();
+    itemRefTaiSan.onChildChanged.listen(_onEntryChangedTaiSan).cancel();
+    itemRefTaiSan.onChildRemoved.listen(_onEntryRemovedTaiSan).cancel();
+    itemRefPhong.onChildAdded.listen(_onEntryAddedPhong).cancel();
+    itemRefPhong.onChildChanged.listen(_onEntryChangedPhong).cancel();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
+    final ref = fb.reference();
     return Container(
       color: Color(0xff04294f),
       padding: const EdgeInsets.only(left: 0,right: 0,top: 10),
@@ -61,6 +74,31 @@ class _ListViewPhongState extends State<Body> {
               ),
               Expanded(
                 child: TextField(
+                  onChanged: (value){
+                    setState(() {
+                      if (value == '')
+                      {
+                        itemRefPhong = ref.child('phongs').orderByChild('idUser').equalTo(widget.idRoom);
+                        _key = Key(DateTime
+                            .now()
+                            .millisecondsSinceEpoch
+                            .toString());
+                        itemsPhong.clear();
+                        itemRefPhong.onChildAdded.listen(_onEntryAddedPhong);
+                      }
+                      else {
+                        itemRefPhong = ref.child('phongs').orderByChild(
+                            "name").startAt(value)
+                            .endAt(value + "\uf8ff");
+                        _key = Key(DateTime
+                            .now()
+                            .millisecondsSinceEpoch
+                            .toString());
+                        itemsPhong.clear();
+                        itemRefPhong.onChildAdded.listen(_onEntryAddedPhong);
+                      }
+                    });
+                  },
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.search),
                     hintText: 'Nhập tên phòng...',
@@ -110,18 +148,19 @@ class _ListViewPhongState extends State<Body> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: items.length,
+              key: _key,
+              itemCount: itemsPhong.length,
               itemBuilder: (context, position) {
                 return new OnSlide(
                   items: <ActionItems>[
                     new ActionItems(icon: new IconButton(icon: new Icon(Icons.delete), onPressed: () {}, color: Colors.red,
-                    ), onPress: (){_deletePhong(context, items[position], position);},  backgroudColor: Color(0xff0f2c4e)),
+                    ), onPress: (){_deletePhong(context, itemsPhong[position], position);},  backgroudColor: Color(0xff0f2c4e)),
                     new ActionItems(icon: new IconButton(  icon: new Icon(Icons.edit),
                       onPressed: () {},color: Colors.green,
                     ), onPress: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => UpdateRoom(items[position])),
+                        MaterialPageRoute(builder: (context) => UpdateRoom(itemsPhong[position])),
                       );
                     },  backgroudColor: Color(0xff0b2442)),
                   ],
@@ -141,19 +180,19 @@ class _ListViewPhongState extends State<Body> {
                       child: Column(
                         children: [
                           Text(
-                            '${items[position].name}',
+                            '${itemsPhong[position].name}',
                             style: TextStyle(fontSize: 30,color:Color(0xff6c8bad),fontWeight: FontWeight.bold),
                           ),
                           Divider(height: 6,color: Colors.transparent,),
                           Text(
-                            '${amountAsset(items[position])} tài sản',style: TextStyle(color:Color(0xff6c8198)),
+                            '${amountAsset(itemsPhong[position])} tài sản',style: TextStyle(color:Color(0xff6c8198)),
                           ),
                         ],
                       ),
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>  TaiSans(items[position])),
+                          MaterialPageRoute(builder: (context) =>  TaiSans(itemsPhong[position])),
                         );
                       },
                     ),
@@ -166,38 +205,64 @@ class _ListViewPhongState extends State<Body> {
       ),
     );
   }
-  void _onPhongAdded(Event event) {
+  _onEntryAddedTaiSan(Event event) {
+    if (!mounted) return;
     setState(() {
-      items.add(new Phong.fromSnapshot(event.snapshot));
-    });
-  }
-  void _onPhongUpdated(Event event) {
-    var oldPhongValue = items.singleWhere((phong) => phong.id == event.snapshot.key);
-    setState(() {
-      items[items.indexOf(oldPhongValue)] = new Phong.fromSnapshot(event.snapshot);
+      itemsTaiSan.add(TaiSan.fromSnapshot(event.snapshot));
     });
   }
 
-  void _onTaiSanAdded(Event event) {
+  _onEntryChangedTaiSan(Event event) {
+    var old = itemsTaiSan.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+    if (!mounted) return;
     setState(() {
-      taisans.add(new TaiSan.fromSnapshot(event.snapshot));
+      itemsTaiSan[itemsTaiSan.indexOf(old)] =
+          TaiSan.fromSnapshot(event.snapshot);
     });
   }
-  void _onTaiSanUpdated(Event event) {
-    var oldTaiSanValue = taisans.singleWhere((taisan) => taisan.key == event.snapshot.key);
+
+  _onEntryRemovedTaiSan(Event event) async {
+    await Future.delayed(Duration(milliseconds: 350), () {});
+    if (!mounted) return;
     setState(() {
-      taisans[taisans.indexOf(oldTaiSanValue)] = new TaiSan.fromSnapshot(event.snapshot);
+      itemsTaiSan.removeWhere((element) => element.key == event.snapshot.key);
+    });
+  }
+
+  _onEntryAddedPhong(Event event) {
+    if (!mounted) return;
+    setState(() {
+      itemsPhong.add(Phong.fromSnapshot(event.snapshot));
+    });
+  }
+
+  _onEntryChangedPhong(Event event) {
+    var old = itemsPhong.singleWhere((entry) {
+      return entry.id == event.snapshot.key;
+    });
+    if (!mounted) return;
+    setState(() {
+      itemsPhong[itemsPhong.indexOf(old)] = Phong.fromSnapshot(event.snapshot);
+    });
+  }
+
+  _onEntryRemovedPhong(Event event) {
+    if (!mounted) return;
+    setState(() {
+      itemsPhong.removeWhere((element) => element.id == event.snapshot.key);
     });
   }
 
   void _deletePhong(BuildContext context, Phong phong, int position) async {
-    for(int i = 0;i< taisans.length;i++)
+    for(int i = 0;i< itemsTaiSan.length;i++)
     {
-      if(taisans[i].keyPhong.contains(phong.id))
+      if(itemsTaiSan[i].keyPhong.contains(phong.id))
       {
-        await taisansReference.child(taisans[i].key).remove().then((_) {
+        await fb.reference().child('taisans').child(itemsTaiSan[i].key).remove().then((_) {
           setState(() {
-            taisans.remove(taisans[i]);
+            itemsTaiSan.remove(itemsTaiSan[i]);
           });
         });
         i=0;
@@ -205,7 +270,7 @@ class _ListViewPhongState extends State<Body> {
     }
     await roomsReference.child(phong.id).remove().then((_) {
       setState(() {
-        items.removeAt(position);
+        itemsPhong.removeAt(position);
       });
     });
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Xóa thành công')));
@@ -214,7 +279,7 @@ class _ListViewPhongState extends State<Body> {
   amountAsset(Phong phong)
   {
     String keyPhong = phong.id;
-    int soLuong = taisans.where((element) => element.keyPhong == keyPhong).length;
+    int soLuong = itemsTaiSan.where((element) => element.keyPhong == keyPhong).length;
     return soLuong;
   }
 

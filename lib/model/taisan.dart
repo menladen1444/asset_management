@@ -33,7 +33,15 @@ class TaiSan {
     result["idUser"] = idUser;
     return result;
   }
-
+  TaiSan.map(dynamic obj) {
+    this.tenTaiSan = obj['tenTaiSan'];
+    this.ngaySuDung = obj['ngaySuDung'];
+    this.tinhTrang = obj['tinhTrang'];
+    this.serial = obj['serial'];
+    this.khoiLuong = obj['khoiLuong'];
+    this.keyPhong = obj['keyPhong'];
+    this.idUser = obj['idUser'];
+  }
   TaiSan.fromSnapshot(DataSnapshot snapshot)
       : key = snapshot.key,
         tenTaiSan = snapshot.value["tenTaiSan"],

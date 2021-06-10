@@ -134,7 +134,7 @@ class _BodyState extends State<TimKiemTaiSan> {
                         setState(() {
                           if (value == '')
                           {
-                            itemRefTaiSan = ref.child('taisans');
+                            itemRefTaiSan = ref.child('taisans').orderByChild('idUser').equalTo(_auth.currentUser.uid);
                             _key = Key(DateTime
                                 .now()
                                 .millisecondsSinceEpoch

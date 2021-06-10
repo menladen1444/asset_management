@@ -26,8 +26,8 @@ class _CreateState extends State<UpdateTaiSan> {
   Phong itemPhong;
   String _currentSelectedValue;
 
-  DatabaseReference itemRefTaiSan;
-  DatabaseReference itemRefPhong;
+  Query itemRefTaiSan;
+  Query itemRefPhong;
 
   var tenTaiSanController = TextEditingController();
   var ngaySuDungController = TextEditingController();
@@ -58,7 +58,7 @@ class _CreateState extends State<UpdateTaiSan> {
 
     User _user = _auth.currentUser;
     String id = _user.uid;
-    final itemRefPhong = FirebaseDatabase.instance.reference().child('phongs').orderByChild("idUser").equalTo('$id');
+    itemRefPhong = FirebaseDatabase.instance.reference().child('phongs').orderByChild("idUser").equalTo('$id');
     itemRefPhong.onChildAdded.listen(_onEntryAddedPhong);
     itemRefPhong.onChildChanged.listen(_onEntryChangedPhong);
     itemRefPhong.onChildRemoved.listen(_onEntryRemovedPhong);

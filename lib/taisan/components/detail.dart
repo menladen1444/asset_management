@@ -22,33 +22,37 @@ class Detail extends StatefulWidget {
   @override
   _DetailState createState() => _DetailState();
 }
-final taisansReference = FirebaseDatabase.instance.reference().child('taisans');
 class _DetailState extends State<Detail> {
   List<TaiSan> taisans;
-  TaiSan taisanhientai;
   StreamSubscription<Event> _onTaiSanAddedSubscription;
   StreamSubscription<Event> _onTaiSanChangedSubscription;
+  StreamSubscription<Event> _onTaiSanRemovedSubscription;
   final fb = FirebaseDatabase.instance;
+  Query taisansReference;
+
   String name = '';
   @override
   void initState() {
-    taisans = new List();
+    taisans = [];
+    taisansReference = FirebaseDatabase.instance.reference().child('taisans');
+
     _onTaiSanAddedSubscription = taisansReference.onChildAdded.listen(_onTaiSanAdded);
     _onTaiSanChangedSubscription = taisansReference.onChildChanged.listen(_onTaiSanUpdated);
+    _onTaiSanRemovedSubscription = taisansReference.onChildChanged.listen(_onTaiSanRemoved);
     super.initState();
+  }
+  @override
+  void dispose() {
+    _onTaiSanAddedSubscription.cancel();
+    _onTaiSanChangedSubscription.cancel();
+    _onTaiSanRemovedSubscription.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final ref = fb.reference();
-    for(var i = 0;i< taisans.length;i++)
-    {
-      if(taisans[i].key.contains(widget.taiSan.key))
-      {
-        taisanhientai = taisans[i];
-      }
-    }
-    FirebaseDatabase.instance.reference().child("phongs").child(taisanhientai.keyPhong).once().then((DataSnapshot snapshot) {
+    FirebaseDatabase.instance.reference().child("phongs").child(widget.taiSan.keyPhong).once().then((DataSnapshot snapshot) {
       setState(() {
         name = snapshot.value["name"];
       });
@@ -81,7 +85,7 @@ class _DetailState extends State<Detail> {
                       Row(
                         children: [
                           Text(
-                            taisanhientai.tenTaiSan,
+                            widget.taiSan.tenTaiSan,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -93,25 +97,25 @@ class _DetailState extends State<Detail> {
                       Row(
                         children: [
                           Text('Số Serial: '),
-                          Text(taisanhientai.serial,style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(widget.taiSan.serial,style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
                       Row(
                         children: [
                           Text('Ngày sử dụng: '),
-                          Text(taisanhientai.ngaySuDung,style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(widget.taiSan.ngaySuDung,style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
                       Row(
                         children: [
                           Text('Tình trạng: '),
-                          Text(taisanhientai.tinhTrang,style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(widget.taiSan.tinhTrang,style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
                       Row(
                         children: [
                           Text('Khối lượng: '),
-                          Text(taisanhientai.khoiLuong,style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(widget.taiSan.khoiLuong,style: TextStyle(fontWeight: FontWeight.bold)),
                           Text(' kg',style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
@@ -122,7 +126,7 @@ class _DetailState extends State<Detail> {
             ),
             Container(
                 child: QrImage(
-                  data: taisanhientai.key,
+                  data: widget.taiSan.key,
                   version: QrVersions.auto,
                   size: 200.0,
                 )
@@ -132,7 +136,7 @@ class _DetailState extends State<Detail> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => UpdateTaiSan(taisanhientai)),
+                  MaterialPageRoute(builder: (context) => UpdateTaiSan(widget.taiSan)),
                 );
               },
               child: Container(
@@ -147,9 +151,9 @@ class _DetailState extends State<Detail> {
             ),
             SizedBox(height: 10,),
             GestureDetector(
-              onTap: () {
+              onTap: () async {
                 Map<String, Object> childUpdates = new HashMap();
-                childUpdates["/taisans/" + taisanhientai.key] = null;
+                childUpdates["/taisans/" + widget.taiSan.key] = null;
                 ref.update(childUpdates);
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Xóa thành công')));
@@ -178,6 +182,13 @@ class _DetailState extends State<Detail> {
     var oldTaiSanValue = taisans.singleWhere((taisan) => taisan.key == event.snapshot.key);
     setState(() {
       taisans[taisans.indexOf(oldTaiSanValue)] = new TaiSan.fromSnapshot(event.snapshot);
+      widget.taiSan = new TaiSan.fromSnapshot(event.snapshot);
+    });
+  }
+  void _onTaiSanRemoved(Event event) {
+    if (!mounted) return;
+    setState(() {
+      taisans.removeWhere((element) => element.key == event.snapshot.key);
     });
   }
 }

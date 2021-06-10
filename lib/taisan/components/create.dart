@@ -26,8 +26,8 @@ class _CreateState extends State<Create> {
   Phong itemPhong;
   String _currentSelectedValue;
 
-  DatabaseReference itemRefTaiSan;
-  DatabaseReference itemRefPhong;
+  Query itemRefTaiSan;
+  Query itemRefPhong;
 
   final tenTaiSanController = TextEditingController();
   final ngaySuDungController = TextEditingController();
@@ -40,8 +40,7 @@ class _CreateState extends State<Create> {
   void initState() {
     itemTaiSan = TaiSan("", "", "", "", "", "","");
     itemPhong = Phong("", "","");
-    final FirebaseDatabase database = FirebaseDatabase.instance;
-    itemRefTaiSan = database.reference().child('taisans');
+    itemRefTaiSan = fb.reference().child('taisans');
 
     itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
     itemRefTaiSan.onChildChanged.listen(_onEntryChangedTaiSan);
@@ -49,7 +48,7 @@ class _CreateState extends State<Create> {
 
     User _user = _auth.currentUser;
     String id = _user.uid;
-    final itemRefPhong = FirebaseDatabase.instance.reference().child('phongs').orderByChild("idUser").equalTo('$id');
+    itemRefPhong = FirebaseDatabase.instance.reference().child('phongs').orderByChild("idUser").equalTo('$id');
     itemRefPhong.onChildAdded.listen(_onEntryAddedPhong);
     itemRefPhong.onChildChanged.listen(_onEntryChangedPhong);
     itemRefPhong.onChildRemoved.listen(_onEntryRemovedPhong);

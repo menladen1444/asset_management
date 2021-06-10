@@ -21,7 +21,6 @@ class _AccountUpdate extends State<UpdateAccount> {
   final Color backgroundInput = Color(0xff031f3b);
   String avatar ;
 
-  @override
   TextEditingController _nameController;
   TextEditingController _idFacebookController;
   TextEditingController _avatarController;

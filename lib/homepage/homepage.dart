@@ -23,17 +23,18 @@ class HomePageState extends State<HomePage> {
 
   final fb = FirebaseDatabase.instance;
   List<UserAccount> items;
+  final String defaultAvatar = 'https://firebasestorage.googleapis.com/v0/b/universal-chain-236713.appspot.com/o/AvatarUser%2Fdefault.png?alt=media&token=2326f659-56ec-4cfc-a4b0-d44ccf8eb394';
   UserAccount userLogin;
   StreamSubscription<Event> _onUserAddedSubscription;
   StreamSubscription<Event> _onUserChangedSubscription;
 
   @override
   void initState() {
-    super.initState();
-    items = new List();
+    userLogin = new UserAccount('', '', '', defaultAvatar);
+    items = [];
     _onUserAddedSubscription = usersReference.onChildAdded.listen(_onUserAdded);
     _onUserChangedSubscription = usersReference.onChildChanged.listen(_onUserUpdated);
-
+    super.initState();
   }
 
   @override
