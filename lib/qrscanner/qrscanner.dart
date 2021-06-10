@@ -8,7 +8,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_tools/qr_code_tools.dart';
 
 class QRScanner extends StatefulWidget {
   @override
@@ -24,6 +26,30 @@ class _QRScannerState extends State<QRScanner> {
   Barcode result;
   QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+
+  File _image;
+  final picker = ImagePicker();
+
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+  String _data;
+
+  /// decode from local file
+  Future decode(String file) async {
+    String data = await QrCodeToolsPlugin.decodeFrom(file);
+    setState(() {
+      _data = data;
+    });
+  }
   @override
   void initState() {
     super.initState();
@@ -45,6 +71,62 @@ class _QRScannerState extends State<QRScanner> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add_a_photo),
+        onPressed: () async {
+          await getImage();
+          if (_image != null) {
+            await decode(_image.path);
+            for(var i = 0;i< taisans.length;i++)
+            {
+              if(taisans[i].key.contains(_data))
+              {
+                taisan = taisans[i];
+                taisansReference.child(taisan.key).set({
+                  'keyPhong': taisan.keyPhong,
+                  'khoiLuong': taisan.khoiLuong,
+                  'ngaySuDung': taisan.ngaySuDung,
+                  'serial': taisan.serial,
+                  'tenTaiSan': taisan.tenTaiSan,
+                  'tinhTrang': taisan.tinhTrang,
+                  'idUser': taisan.idUser,
+                  'gio': "${DateTime.now().hour}",
+                  'phut': "${DateTime.now().minute}",
+                  'ngay': "${DateTime.now().day}",
+                  'thang': "${DateTime.now().month}",
+                  'nam': "${DateTime.now().year}",
+                  'trangThaiQuet': '1',
+                });
+              }
+              else{
+                taisansReference.child(taisans[i].key).set({
+                  'keyPhong': taisans[i].keyPhong,
+                  'khoiLuong': taisans[i].khoiLuong,
+                  'ngaySuDung': taisans[i].ngaySuDung,
+                  'serial': taisans[i].serial,
+                  'tenTaiSan': taisans[i].tenTaiSan,
+                  'tinhTrang': taisans[i].tinhTrang,
+                  'idUser': taisans[i].idUser,
+                  'gio': taisans[i].gio,
+                  'phut': taisans[i].phut,
+                  'ngay': taisans[i].ngay,
+                  'thang': taisans[i].thang,
+                  'nam': taisans[i].nam,
+                  'trangThaiQuet': '0',
+                });
+              }
+            }
+            controller.pauseCamera();
+            if(taisan == null)
+            {
+              _showMyDialogKhongTimThay();
+            }
+            else{
+              _showMyDialog();
+            }
+          }
+        },
+      ),
       backgroundColor:Color(0xff4f7d9a),
       body: Column(
         children: <Widget>[
