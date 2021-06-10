@@ -35,13 +35,13 @@ class _BodyDetail extends State<DetailAccount> {
     super.initState();
     items = new List();
     taisans = new List();
+    userLogin = new UserAccount('','','','');
     String id = _auth.currentUser.uid;
     final taisansReference = FirebaseDatabase.instance.reference().child('taisans').orderByChild("idUser").equalTo('$id');
     _onUserAddedSubscription = usersReference.onChildAdded.listen(_onUserAdded);
     _onUserChangedSubscription = usersReference.onChildChanged.listen(_onUserUpdated);
     _onTaiSanAddedSubscription = taisansReference.onChildAdded.listen(_onTaiSanAdded);
     _onTaiSanChangedSubscription = taisansReference.onChildChanged.listen(_onTaiSanUpdated);
-
   }
 
   @override
@@ -60,23 +60,20 @@ class _BodyDetail extends State<DetailAccount> {
     {
       if(items[i].idFacebook.contains(_user.uid))
       {
-        userLogin = items[i];
+        userLogin.avatar = items[i].avatar;
+        userLogin.name = items[i].name;
+        userLogin.id = items[i].id;
+        userLogin.idFacebook = items[i].idFacebook;
+
       }
     }
     int soLuong = taisans.length;
     return new Scaffold(
         backgroundColor: Color(0xff04294f),
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Color(0xff021930),
-          ),
-          backgroundColor: Color(0xff194370),
-          title: const Text('Tài khoản'),
-          centerTitle: true,
-        ),
         body: new Container(
-            color: Color(0xff010e1c),
-            child: Column(
+            color: Color(0xff04294f),
+            child: soLuong != null
+              ?Column(
                 children: <Widget>[
                   Container(
                       padding: EdgeInsets.only(left: 20,top:20,right: 20),
@@ -87,11 +84,15 @@ class _BodyDetail extends State<DetailAccount> {
                               color: Colors.white,
                               textColor: Colors.white,
                               child: CircleAvatar(
-                                backgroundImage: NetworkImage(userLogin.avatar),
-                                radius: 26,
-                                foregroundColor: Colors.blue,
+                                backgroundColor: Color(0xffffb137),
+                                radius: 28,
+                                child: CircleAvatar(
+                                  backgroundImage: NetworkImage(userLogin.avatar),
+                                  radius: 26,
+                                  foregroundColor: Colors.blue,
+                                ),
                               ),
-                              padding: EdgeInsets.all(1),
+                              padding: EdgeInsets.all(0),
                               shape: CircleBorder(),
                             ),
                             Padding(
@@ -99,8 +100,8 @@ class _BodyDetail extends State<DetailAccount> {
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(userLogin.name, style: TextStyle(fontSize: 20,color: Colors.white)),
-                                    Text("Có tổng cộng $soLuong tài sản", style: TextStyle(fontSize: 13,color: Colors.white54,height: 1.7))
+                                    Text(userLogin.name, style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Color(0xffffb137))),
+                                    Text("Có tổng cộng $soLuong tài sản", style: TextStyle(fontSize: 13,color: Color(0xff20b4a7),height: 1.7))
                                   ]
                               ),
                             ),
@@ -112,19 +113,24 @@ class _BodyDetail extends State<DetailAccount> {
                   new Container(
                     padding: EdgeInsets.only(left: 20,right: 20),
                     child: Row(
-                      children: [Text('Thông tin cá nhân', style: TextStyle(color:Colors.white24))],
+                      children: [Text('Thông tin cá nhân', style: TextStyle(color:Colors.white54))],
                     ),
 
                   ),
                   SizedBox(height: 10),
                   new Container(
-                    padding: EdgeInsets.symmetric(vertical: 7,horizontal: 20),
-                    color: Color(0xff041629),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(width: 2, color: Color(0xff041629)),
+                      ),
+                      color:  Color(0xff0f3d6c),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 15,horizontal: 20),
                     width: double.infinity,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Họ và tên", style: TextStyle(fontSize: 13,color: Colors.white54)),
+                          Text("Họ và tên", style: TextStyle(fontSize: 13,color: Color(0xff20b4a7))),
                           Text(userLogin.name, style: TextStyle(fontSize: 18,color: Colors.white,height: 1.5))
                         ]
                     ),
@@ -132,13 +138,18 @@ class _BodyDetail extends State<DetailAccount> {
 
                   Divider(height: 1.5,color: Color(0xff265180),),
                   new Container(
-                    padding: EdgeInsets.symmetric(vertical: 7,horizontal: 20),
-                    color: Color(0xff041629),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(width: 2, color: Color(0xff041629)),
+                      ),
+                      color:  Color(0xff0f3d6c),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 15,horizontal: 20),
                     width: double.infinity,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Email", style: TextStyle(fontSize: 13,color: Colors.white54)),
+                          Text("Email", style: TextStyle(fontSize: 13,color: Color(0xff20b4a7))),
                           Text(_user.email, style: TextStyle(fontSize: 18,color: Colors.white,height: 1.5))
                         ]
                     ),
@@ -147,7 +158,7 @@ class _BodyDetail extends State<DetailAccount> {
                   new Container(
                     padding: EdgeInsets.only(left: 20,right: 20),
                     child: Row(
-                      children: [Text('Chức năng', style: TextStyle(color:Colors.white24))],
+                      children: [Text('Chức năng', style: TextStyle(color:Colors.white54))],
                     ),
                   ),
                   SizedBox(height: 10),
@@ -155,7 +166,7 @@ class _BodyDetail extends State<DetailAccount> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
-                        primary: Color(0xff041629),
+                        primary: Color(0xff0f3d6c),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(0),
                         ),
@@ -182,19 +193,27 @@ class _BodyDetail extends State<DetailAccount> {
                   new Container(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        side: BorderSide(width: 2.0, color: Color(0xff041629)),
                         padding: EdgeInsets.symmetric(horizontal: 25, vertical: 13),
-                        primary: Color(0xff02162c),
+                        primary: Color(0xff20b4a7),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
                       ),
                       onPressed: () {
                         gooleSignout();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  StartPage()),
+                        );
                       },
-                      child: Text('Đăng xuất',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.white)),
+                      child: Text('Đăng xuất',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Color(0xff04294f))),
                     ),
                   ),
                 ]
+            )
+                :Container(
+              child: Text('KHÔNG CÓ KẾT NỐI MẠNG'),
             )
         )
     );

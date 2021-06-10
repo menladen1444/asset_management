@@ -18,7 +18,7 @@ class _TaiSanState extends State<TaiSans> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff194370),
+        backgroundColor: Color(0xff04294f),
         title: Text(widget.phong.name),
         centerTitle: true,
       ),

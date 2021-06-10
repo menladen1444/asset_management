@@ -19,8 +19,10 @@ class Body extends StatefulWidget {
 final roomsReference = FirebaseDatabase.instance.reference().child('phongs');
 final taisansReference = FirebaseDatabase.instance.reference().child('taisans');
 class _ListViewPhongState extends State<Body> {
-  List<Phong> items;
+  List<Phong> phongs;
   List<TaiSan> taisans;
+  List<Phong> results;
+  List<Phong> _foundPhongs;
 
   StreamSubscription<Event> _onPhongAddedSubscription;
   StreamSubscription<Event> _onPhongChangedSubscription;
@@ -29,10 +31,12 @@ class _ListViewPhongState extends State<Body> {
   @override
   void initState() {
     super.initState();
-    items = new List();
+    _foundPhongs = new List();
+    phongs = new List();
     taisans = new List();
     String id = widget.idRoom;
     final phongsReference = FirebaseDatabase.instance.reference().child('phongs').orderByChild("idUser").equalTo('$id');
+    _foundPhongs = phongs;
     _onPhongAddedSubscription = phongsReference.onChildAdded.listen(_onPhongAdded);
     _onPhongChangedSubscription = phongsReference.onChildChanged.listen(_onPhongUpdated);
     _onTaiSanAddedSubscription = taisansReference.onChildAdded.listen(_onTaiSanAdded);
@@ -46,11 +50,24 @@ class _ListViewPhongState extends State<Body> {
     super.dispose();
   }
 
+  void _runFilter(String enteredKeyword) {
+    results = new List();
+    if (enteredKeyword.isEmpty) {
+      results = phongs;
+    } else {
+      results = phongs.where((phong) => phong.name.toLowerCase().contains(enteredKeyword.toLowerCase())).toList();
+    }
+
+    setState(() {
+      _foundPhongs = results;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
     return Container(
-      color: Color(0xff04294f),
+      color: Color(0xfffcbc58),
       padding: const EdgeInsets.only(left: 0,right: 0,top: 10),
       child: Column(
         children: [
@@ -61,12 +78,15 @@ class _ListViewPhongState extends State<Body> {
               ),
               Expanded(
                 child: TextField(
+                  onChanged: (value) => _runFilter(value),
+                  style: TextStyle(color: Colors.grey),
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
+                    prefixIcon: Icon(Icons.search,color: Colors.grey,),
                     hintText: 'Nhập tên phòng...',
                     hintStyle: TextStyle(color: Colors.grey),
-                    fillColor: Color(0xff03203d),
+                    fillColor: Color(0xff04294f),
                     filled: true,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
                     enabledBorder: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                       borderSide: const BorderSide(
@@ -86,10 +106,10 @@ class _ListViewPhongState extends State<Body> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Colors.black38,
+                  color: Colors.black45,
                 ),
                 child: IconButton(
-                  iconSize: 42,
+                  iconSize: 33,
                   color: Colors.white38,
                   icon: Icon(Icons.add),
                   onPressed: () {
@@ -109,58 +129,64 @@ class _ListViewPhongState extends State<Body> {
             height: 10,
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, position) {
-                return new OnSlide(
-                  items: <ActionItems>[
-                    new ActionItems(icon: new IconButton(icon: new Icon(Icons.delete), onPressed: () {}, color: Colors.red,
-                    ), onPress: (){_deletePhong(context, items[position], position);},  backgroudColor: Color(0xff0f2c4e)),
-                    new ActionItems(icon: new IconButton(  icon: new Icon(Icons.edit),
-                      onPressed: () {},color: Colors.green,
-                    ), onPress: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => UpdateRoom(items[position])),
-                      );
-                    },  backgroudColor: Color(0xff0b2442)),
-                  ],
-
-                  child: new Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                        primary: Color(0xff01325a),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            '${items[position].name}',
-                            style: TextStyle(fontSize: 30,color:Color(0xff6c8bad),fontWeight: FontWeight.bold),
-                          ),
-                          Divider(height: 6,color: Colors.transparent,),
-                          Text(
-                            '${amountAsset(items[position])} tài sản',style: TextStyle(color:Color(0xff6c8198)),
-                          ),
-                        ],
-                      ),
-                      onPressed: () {
+            child: _foundPhongs.length > 0
+                ? ListView.builder(
+                itemCount: _foundPhongs.length,
+                itemBuilder: (context, position) {
+                  return new OnSlide(
+                    items: <ActionItems>[
+                      new ActionItems(icon: new IconButton(icon: new Icon(Icons.delete), onPressed: () {}, color: Colors.red,
+                      ), onPress: (){_deletePhong(context, _foundPhongs[position], position);},  backgroudColor: Color(0xff0f2c4e)),
+                      new ActionItems(icon: new IconButton(  icon: new Icon(Icons.edit),
+                        onPressed: () {},color: Colors.green,
+                      ), onPress: (){
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>  TaiSans(items[position])),
+                          MaterialPageRoute(builder: (context) => UpdateRoom(_foundPhongs[position])),
                         );
-                      },
+                      },  backgroudColor: Color(0xff0b2442)),
+                    ],
+
+                    child: new Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                          primary: Color(0xfffdcf88),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              '${_foundPhongs[position].name}',
+                              style: TextStyle(fontSize: 30,color:Color(0xff04294f),fontWeight: FontWeight.bold),
+                            ),
+                            Divider(height: 6,color: Colors.transparent,),
+                            Text(
+                              '${amountAsset(_foundPhongs[position])} tài sản',style: TextStyle(color:Color(0xff6c8198)),
+                            ),
+                          ],
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>  TaiSans(_foundPhongs[position])),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                );
-              }
-            ),
+                  );
+                }
+            )
+                : Container(
+                    padding: const EdgeInsets.only(top: 80),
+                    child: Text('Danh sách trống', style: TextStyle(fontSize: 24,color: Colors.white),
+              ),
+            )
           )
         ],
       ),
@@ -168,13 +194,13 @@ class _ListViewPhongState extends State<Body> {
   }
   void _onPhongAdded(Event event) {
     setState(() {
-      items.add(new Phong.fromSnapshot(event.snapshot));
+      phongs.add(new Phong.fromSnapshot(event.snapshot));
     });
   }
   void _onPhongUpdated(Event event) {
-    var oldPhongValue = items.singleWhere((phong) => phong.id == event.snapshot.key);
+    var oldPhongValue = phongs.singleWhere((phong) => phong.id == event.snapshot.key);
     setState(() {
-      items[items.indexOf(oldPhongValue)] = new Phong.fromSnapshot(event.snapshot);
+      phongs[phongs.indexOf(oldPhongValue)] = new Phong.fromSnapshot(event.snapshot);
     });
   }
 
@@ -205,7 +231,7 @@ class _ListViewPhongState extends State<Body> {
     }
     await roomsReference.child(phong.id).remove().then((_) {
       setState(() {
-        items.removeAt(position);
+        phongs.removeAt(position);
       });
     });
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Xóa thành công')));

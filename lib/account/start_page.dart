@@ -14,7 +14,6 @@ class StartPage extends StatefulWidget {
   _Login createState() => _Login();
 }
 final usersReference = FirebaseDatabase.instance.reference().child('users');
-
 class _Login extends State<StartPage> {
   final Color foregroundColor = Color(0xff04294f);
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -101,17 +100,10 @@ class _Login extends State<StartPage> {
                             color: Colors.transparent,
                             width: 5.0,
                           ),
-
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(color: Color(0xff0054bf),offset: Offset(0, 0.75)),
                 ],
               ),
             ),

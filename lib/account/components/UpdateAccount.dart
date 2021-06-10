@@ -17,8 +17,8 @@ class UpdateAccount extends StatefulWidget {
 }
 final usersReference = FirebaseDatabase.instance.reference().child('users');
 class _AccountUpdate extends State<UpdateAccount> {
-  final Color foregroundColor = Color(0xff010e1c);
-  final Color backgroundInput = Color(0xff031f3b);
+  final Color foregroundColor = Color(0xff356291);
+  final Color backgroundInput = Color(0xff356291);
   String avatar ;
 
   @override
@@ -39,7 +39,7 @@ class _AccountUpdate extends State<UpdateAccount> {
     if(avatar == null) {avatar = widget.userLogin.avatar;}
     else{}
     return Scaffold(
-      backgroundColor:Color(0xff010e1c),
+      backgroundColor:Color(0xff356291),
         body: Container(
             decoration: new BoxDecoration(
               gradient: new LinearGradient(
@@ -87,10 +87,10 @@ class _AccountUpdate extends State<UpdateAccount> {
                   ),
                 ),
                 new Container(
-                  child: Text('khi bạn click chọn một hình ảnh từ thư viện ảnh',textAlign:TextAlign.center,style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15,color: Color(0xff3e4c5c))),
+                  child: Text('khi bạn click chọn một hình ảnh từ thư viện ảnh',textAlign:TextAlign.center,style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15,color: Color(0xff2c3743))),
                 ),
                 new Container(
-                  child: Text('thì ảnh đại diện của bạn đã cập nhật',textAlign:TextAlign.center,style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15,color: Color(0xff3e4c5c))),
+                  child: Text('thì ảnh đại diện của bạn đã cập nhật',textAlign:TextAlign.center,style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15,color: Color(0xff2c3743))),
                 ),
                 new Container(
                   width: MediaQuery.of(context).size.width,
@@ -98,9 +98,10 @@ class _AccountUpdate extends State<UpdateAccount> {
                   margin: const EdgeInsets.only(left: 30.0, right: 30.0,top:20),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
+                    color: Color(0xff4e7cac),
                     border: Border.all(
-                      color: Color(0xff00d1ff),
-                      width: 0.5,
+                      color: Color(0xff041629),
+                      width: 1,
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -120,7 +121,7 @@ class _AccountUpdate extends State<UpdateAccount> {
                           style: new TextStyle(color: Colors.white,fontSize: 22),
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            prefixIcon: Icon(Icons.drive_file_rename_outline,color: Color(0xff593b12),size: 30,),
+                            prefixIcon: Icon(Icons.drive_file_rename_outline,color: Color(0xff041629),size: 30,),
                             hintText: 'Họ và tên',
                             hintStyle: TextStyle(color: Colors.white,fontSize: 22),
                           ),
@@ -139,7 +140,7 @@ class _AccountUpdate extends State<UpdateAccount> {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                              primary: Color(0xffd9902b),
+                              primary: Color(0xffffb137),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),

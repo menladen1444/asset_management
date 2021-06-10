@@ -14,6 +14,11 @@ class UserAccount {
     this._idFacebook = obj['idFacebook'];
     this._avatar = obj['avatar'];
   }
+  set id(String val) => _id = val;
+  set name(String val) => _name = val;
+  set idFacebook(String val) => _idFacebook = val;
+  set avatar(String val) => _avatar = val;
+
   String get id => _id;
   String get name => _name;
   String get idFacebook => _idFacebook;

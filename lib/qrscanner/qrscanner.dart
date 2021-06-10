@@ -14,7 +14,6 @@ class QRScanner extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _QRScannerState();
 }
-
 class _QRScannerState extends State<QRScanner> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   List<TaiSan> taisans;
@@ -33,7 +32,6 @@ class _QRScannerState extends State<QRScanner> {
     final taisansReference = FirebaseDatabase.instance.reference().child('taisans').orderByChild('idUser').equalTo('$idUser');
     _onTaiSanAddedSubscription = taisansReference.onChildAdded.listen(_onTaiSanAdded);
     _onTaiSanChangedSubscription = taisansReference.onChildChanged.listen(_onTaiSanUpdated);
-
   }
   @override
   void reassemble() {
@@ -59,11 +57,7 @@ class _QRScannerState extends State<QRScanner> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   SizedBox(height: 15),
-                  if (result != null)
-                    Text(
-                        'Barcode Type: ${describeEnum(result.format)}   ID: ${result.code}',style: TextStyle(fontSize: 16,color: Color(0xff80a7c0)))
-                  else
-                    Text('Scan a QR code', style: TextStyle(fontSize: 22,color: Color(0xff80a7c0),fontWeight: FontWeight.bold)),
+                  Text('Scan a QR code', style: TextStyle(fontSize: 22,color: Color(0xff80a7c0),fontWeight: FontWeight.bold)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -149,6 +143,20 @@ class _QRScannerState extends State<QRScanner> {
                           child: Text('resume', style: TextStyle(fontSize: 20)),
                         ),
                       ),
+                      Container(
+                        margin: EdgeInsets.all(8),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.only(right: 20,left: 20,top: 10,bottom: 10),
+                            primary: Colors.blueGrey, // background
+                            onPrimary: Colors.white, // foreground
+                          ),
+                          onPressed: () async {
+                            await Navigator.pop(context);
+                          },
+                          child: Text('Cancel', style: TextStyle(fontSize: 20)),
+                        ),
+                      ),
                     ],
 
                   ),
@@ -163,18 +171,15 @@ class _QRScannerState extends State<QRScanner> {
   }
 
   Widget _buildQrView(BuildContext context) {
-    // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
         MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
-    // To ensure the Scanner view is properly sizes after rotation
-    // we need to listen for Flutter SizeChanged notification and update controller
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: Colors.red,
+          borderColor: Colors.blue,
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,
@@ -194,6 +199,38 @@ class _QRScannerState extends State<QRScanner> {
           if(taisans[i].key.contains(result.code))
           {
             taisan = taisans[i];
+            taisansReference.child(taisan.key).set({
+              'keyPhong': taisan.keyPhong,
+              'khoiLuong': taisan.khoiLuong,
+              'ngaySuDung': taisan.ngaySuDung,
+              'serial': taisan.serial,
+              'tenTaiSan': taisan.tenTaiSan,
+              'tinhTrang': taisan.tinhTrang,
+              'idUser': taisan.idUser,
+              'gio': "${DateTime.now().hour}",
+              'phut': "${DateTime.now().minute}",
+              'ngay': "${DateTime.now().day}",
+              'thang': "${DateTime.now().month}",
+              'nam': "${DateTime.now().year}",
+              'trangThaiQuet': '1',
+            });
+          }
+          else{
+            taisansReference.child(taisans[i].key).set({
+              'keyPhong': taisans[i].keyPhong,
+              'khoiLuong': taisans[i].khoiLuong,
+              'ngaySuDung': taisans[i].ngaySuDung,
+              'serial': taisans[i].serial,
+              'tenTaiSan': taisans[i].tenTaiSan,
+              'tinhTrang': taisans[i].tinhTrang,
+              'idUser': taisans[i].idUser,
+              'gio': taisans[i].gio,
+              'phut': taisans[i].phut,
+              'ngay': taisans[i].ngay,
+              'thang': taisans[i].thang,
+              'nam': taisans[i].nam,
+              'trangThaiQuet': '0',
+            });
           }
         }
         controller.pauseCamera();
@@ -220,13 +257,17 @@ class _QRScannerState extends State<QRScanner> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Row(
+                  Column(
                     children: [
-                      Text(
-                        'Không tìm thấy tài sản',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
+                      if (result != null)
+                        Text(
+                            'Barcode Type: ${describeEnum(result.format)}   ID: ${result.code}',style: TextStyle(fontSize: 16,color: Color(0xff80a7c0)))
+                      else
+                        Text(
+                          'Không tìm thấy tài sản',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
                     ],
                   ),
                 ],

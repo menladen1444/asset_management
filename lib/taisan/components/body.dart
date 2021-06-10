@@ -1,11 +1,14 @@
 // @dart=2.9
 
+import 'dart:async';
+
 import 'package:asset_management/model/phong.dart';
 import 'package:asset_management/model/taisan.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'create.dart';
 import 'detail.dart';
 
@@ -18,147 +21,80 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   final fb = FirebaseDatabase.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
-  List<TaiSan> itemsTaiSan = [];
-  List<Phong> itemsPhong = [];
+  List<Phong> phongs;
+  List<TaiSan> taisans;
+  List<TaiSan> results;
+  List<TaiSan> _foundTaiSans;
 
-  TaiSan itemTaiSan;
-  Phong itemPhong;
-
-  Query itemRefTaiSan;
-  Query itemRefPhong;
-
-  Key _key;
-  TextEditingController searchController = TextEditingController();
+  StreamSubscription<Event> _onPhongAddedSubscription;
+  StreamSubscription<Event> _onPhongChangedSubscription;
+  StreamSubscription<Event> _onTaiSanAddedSubscription;
+  StreamSubscription<Event> _onTaiSanChangedSubscription;
 
   @override
   void initState() {
-    itemTaiSan = TaiSan("", "", "", "", "", "","");
-    itemPhong = Phong("", "","");
-    final FirebaseDatabase database = FirebaseDatabase.instance;
+    _foundTaiSans = new List();
+    phongs = new List();
+    taisans = new List();
+    String idUser = _auth.currentUser.uid;
+    final phongsReference = FirebaseDatabase.instance.reference().child('phongs').orderByChild("idUser").equalTo('$idUser');
     String idPhong = widget.phong.id;
-    itemRefTaiSan = database.reference().child('taisans').orderByChild('keyPhong').equalTo('$idPhong');
-
-    itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
-    itemRefTaiSan.onChildChanged.listen(_onEntryChangedTaiSan);
-    itemRefTaiSan.onChildRemoved.listen(_onEntryRemovedTaiSan);
-
-    itemRefPhong = database.reference().child('phongs');
-
-    itemRefPhong.onChildAdded.listen(_onEntryAddedPhong);
-    itemRefPhong.onChildChanged.listen(_onEntryChangedPhong);
-    itemRefPhong.onChildRemoved.listen(_onEntryRemovedPhong);
+    final taisansReference = FirebaseDatabase.instance.reference().child('taisans').orderByChild('keyPhong').equalTo('$idPhong');
+    _foundTaiSans = taisans;
+    _onPhongAddedSubscription = phongsReference.onChildAdded.listen(_onPhongAdded);
+    _onPhongChangedSubscription = phongsReference.onChildChanged.listen(_onPhongUpdated);
+    _onTaiSanAddedSubscription = taisansReference.onChildAdded.listen(_onTaiSanAdded);
+    _onTaiSanChangedSubscription = taisansReference.onChildChanged.listen(_onTaiSanUpdated);
 
     super.initState();
   }
 
-  _onEntryAddedTaiSan(Event event) {
-    if (!mounted) return;
-    setState(() {
-      itemsTaiSan.add(TaiSan.fromSnapshot(event.snapshot));
-    });
-  }
-
-  _onEntryChangedTaiSan(Event event) {
-    var old = itemsTaiSan.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-    if (!mounted) return;
-    setState(() {
-      itemsTaiSan[itemsTaiSan.indexOf(old)] =
-          TaiSan.fromSnapshot(event.snapshot);
-    });
-  }
-
-  _onEntryRemovedTaiSan(Event event) async {
-    await Future.delayed(Duration(milliseconds: 350), () {});
-    if (!mounted) return;
-    setState(() {
-      itemsTaiSan.removeWhere((element) => element.key == event.snapshot.key);
-    });
-  }
-
-  _onEntryAddedPhong(Event event) {
-    if (!mounted) return;
-    setState(() {
-      itemsPhong.add(Phong.fromSnapshot(event.snapshot));
-    });
-  }
-
-  _onEntryChangedPhong(Event event) {
-    var old = itemsPhong.singleWhere((entry) {
-      return entry.id == event.snapshot.key;
-    });
-    if (!mounted) return;
-    setState(() {
-      itemsPhong[itemsPhong.indexOf(old)] = Phong.fromSnapshot(event.snapshot);
-    });
-  }
-
-  _onEntryRemovedPhong(Event event) {
-    if (!mounted) return;
-    setState(() {
-      itemsPhong.removeWhere((element) => element.id == event.snapshot.key);
-    });
-  }
-
   @override
   void dispose() {
-    itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan).cancel();
-    itemRefTaiSan.onChildChanged.listen(_onEntryChangedTaiSan).cancel();
-    itemRefTaiSan.onChildRemoved.listen(_onEntryRemovedTaiSan).cancel();
-    itemRefPhong.onChildAdded.listen(_onEntryAddedPhong).cancel();
-    itemRefPhong.onChildChanged.listen(_onEntryChangedPhong).cancel();
-    itemRefPhong.onChildRemoved.listen(_onEntryRemovedPhong).cancel();
+    _onPhongAddedSubscription.cancel();
+    _onPhongChangedSubscription.cancel();
+    _onTaiSanAddedSubscription.cancel();
+    _onTaiSanChangedSubscription.cancel();
     super.dispose();
+  }
+
+  void _runFilter(String enteredKeyword) {
+    results = new List();
+    if (enteredKeyword.isEmpty) {
+      results = taisans;
+    } else {
+      results = taisans.where((taisan) => taisan.tenTaiSan.toLowerCase().contains(enteredKeyword.toLowerCase())).toList();
+    }
+
+    setState(() {
+      _foundTaiSans = results;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final ref = fb.reference();
     return Container(
       padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-      color: Color(0xff6298a0),
+      color: Color(0xff20b4a7),
       child: Column(
         children: [
           Row(
             children: [
               Expanded(
                 child: TextField(
-                  onChanged: (value){
-                    setState(() {
-                      if (value == '')
-                      {
-                        itemRefTaiSan = ref.child('taisans');
-                        _key = Key(DateTime
-                            .now()
-                            .millisecondsSinceEpoch
-                            .toString());
-                        itemsTaiSan.clear();
-                        itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
-                      }
-                      else {
-                        itemRefTaiSan = ref.child('taisans').orderByChild(
-                            "tenTaiSan").startAt(value)
-                            .endAt(value + "\uf8ff");
-                        _key = Key(DateTime
-                            .now()
-                            .millisecondsSinceEpoch
-                            .toString());
-                        itemsTaiSan.clear();
-                        itemRefTaiSan.onChildAdded.listen(_onEntryAddedTaiSan);
-                      }
-                    });
-                  },
-                  controller: searchController,
+                  style: TextStyle(color: Colors.white),
+                  onChanged: (value) => _runFilter(value),
                   decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
                     prefixIcon: Icon(Icons.search),
                     hintText: 'Nhập tên tài sản...',
                     hintStyle: TextStyle(color: Colors.white),
                     fillColor: Colors.black12,
                     filled: true,
                     enabledBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide: const BorderSide(
                         color: Colors.transparent,
                       ),
@@ -175,13 +111,13 @@ class _BodyState extends State<Body> {
               ),
               Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
                   color: Colors.black38,
                 ),
                 child: IconButton(
-                  iconSize: 42,
+                  iconSize: 30,
                   color: Colors.white38,
-                  icon: Icon(Icons.add),
+                  icon: Icon(Icons.add_circle),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -195,73 +131,122 @@ class _BodyState extends State<Body> {
           SizedBox(
             height: 10,
           ),
-          Flexible(
-              child: FirebaseAnimatedList(
-                  key: _key,
-                  query: itemRefTaiSan,
-                  itemBuilder: (_, DataSnapshot snapshot,
-                      Animation<double> animation, int index) {
-                    return new GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Detail(itemsTaiSan[index])),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Container(
-                          height: 100,
-                          alignment: Alignment.center,
-                          decoration: new BoxDecoration(
-                            color: Color(0xffd1fdfe),
-                            borderRadius:
-                            new BorderRadius.all(Radius.circular(5.0)),
+          Expanded(
+            child: _foundTaiSans.length > 0
+                ? ListView.builder(
+              itemCount: _foundTaiSans.length,
+              itemBuilder: (context, index) => GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Detail(_foundTaiSans[index])),
+                  );
+                },
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Container(
+                    height: 130,
+                    alignment: Alignment.center,
+                    decoration: new BoxDecoration(
+                      color: Color(0xff91efdb),
+                      borderRadius:
+                      new BorderRadius.all(Radius.circular(5.0)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20,bottom: 5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                _foundTaiSans[index].tenTaiSan,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(width: 5),
+                              Container(
+                                padding: const EdgeInsets.only(top:5,bottom: 5,left: 15,right: 15),
+                                decoration: new BoxDecoration(
+                                  color: Color(0xff04294f),
+                                  borderRadius:
+                                  new BorderRadius.all(Radius.circular(10.0)),
+                                ),
+                                child: Row(
+                                  children: [
+
+                                    Text(_foundTaiSans[index].khoiLuong,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16)),
+                                    Text('kg',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16)),
+
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      itemsTaiSan[index].tenTaiSan,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(width: 5),
-                                    Icon(Icons.room,color:Colors.blueAccent ,),
-                                    Text(itemsPhong
-                                        .where((element) => element.id
-                                        .contains(
-                                        itemsTaiSan[index].keyPhong))
-                                        .first
-                                        .name,style: TextStyle(color: Colors.blueAccent,fontWeight: FontWeight.bold,fontSize: 20)),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text('Số Serial: '),
-                                    Text(itemsTaiSan[index].serial),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text('Ngày sử dụng: '),
-                                    Text(itemsTaiSan[index].ngaySuDung),
-                                  ],
-                                ),
-                              ],
-                            ),
+                          Row(
+                            children: [
+                              Text('Số Serial: '),
+                              Text(_foundTaiSans[index].serial,style:TextStyle(fontWeight: FontWeight.bold,letterSpacing: 3,fontFamily: 'YanoneKaffeesatz')),
+                            ],
                           ),
-                        ),
+                          Row(
+                            children: [
+                              Text('Ngày sử dụng: '),
+                              Text(_foundTaiSans[index].ngaySuDung,style:TextStyle(fontWeight: FontWeight.bold,letterSpacing: 3,fontFamily: 'YanoneKaffeesatz')),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text('Tình trang: '),
+                              Container(
+                                padding: const EdgeInsets.only(top:3,bottom: 5,left: 15,right: 15),
+                                decoration: new BoxDecoration(
+                                  color: Color(0xffffb137),
+                                  borderRadius:
+                                  new BorderRadius.all(Radius.circular(5.0)),
+                                ),
+                                child: Text(_foundTaiSans[index].tinhTrang,style: TextStyle(color: Color(0xff04294f),fontWeight: FontWeight.bold,letterSpacing: 3,fontFamily: 'YanoneKaffeesatz'),),
+                              )
+                            ],
+                          ),
+                        ],
                       ),
-                    );
-                  })),
+                    ),
+                  ),
+                ),
+              ),
+            )
+                : Container(
+                    padding: const EdgeInsets.only(top: 80),
+                    child: Text('Danh sách trống', style: TextStyle(fontSize: 24,color: Colors.white),),
+            )
+          ),
         ],
       ),
     );
+  }
+  void _onPhongAdded(Event event) {
+    setState(() {
+      phongs.add(new Phong.fromSnapshot(event.snapshot));
+    });
+  }
+  void _onPhongUpdated(Event event) {
+    var oldPhongValue = phongs.singleWhere((phong) => phong.id == event.snapshot.key);
+    setState(() {
+      phongs[phongs.indexOf(oldPhongValue)] = new Phong.fromSnapshot(event.snapshot);
+    });
+  }
+
+  void _onTaiSanAdded(Event event) {
+    setState(() {
+      taisans.add(new TaiSan.fromSnapshot(event.snapshot));
+    });
+  }
+  void _onTaiSanUpdated(Event event) {
+    var oldTaiSanValue = taisans.singleWhere((taisan) => taisan.key == event.snapshot.key);
+    setState(() {
+      taisans[taisans.indexOf(oldTaiSanValue)] = new TaiSan.fromSnapshot(event.snapshot);
+    });
   }
 }
