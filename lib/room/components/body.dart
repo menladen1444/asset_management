@@ -28,6 +28,7 @@ class _ListViewPhongState extends State<Body> {
   StreamSubscription<Event> _onPhongChangedSubscription;
   StreamSubscription<Event> _onTaiSanAddedSubscription;
   StreamSubscription<Event> _onTaiSanChangedSubscription;
+  StreamSubscription<Event> _onTaiSanRemovedSubscription;
   @override
   void initState() {
     super.initState();
@@ -41,12 +42,16 @@ class _ListViewPhongState extends State<Body> {
     _onPhongChangedSubscription = phongsReference.onChildChanged.listen(_onPhongUpdated);
     _onTaiSanAddedSubscription = taisansReference.onChildAdded.listen(_onTaiSanAdded);
     _onTaiSanChangedSubscription = taisansReference.onChildChanged.listen(_onTaiSanUpdated);
+    _onTaiSanRemovedSubscription = FirebaseDatabase.instance.reference().child('taisans').onChildRemoved.listen(_onTaiSanRemoved);
   }
 
   @override
   void dispose() {
     _onPhongAddedSubscription.cancel();
     _onPhongChangedSubscription.cancel();
+    _onTaiSanAddedSubscription.cancel();
+    _onTaiSanChangedSubscription.cancel();
+    _onTaiSanRemovedSubscription.cancel();
     super.dispose();
   }
 
@@ -213,6 +218,12 @@ class _ListViewPhongState extends State<Body> {
     var oldTaiSanValue = taisans.singleWhere((taisan) => taisan.key == event.snapshot.key);
     setState(() {
       taisans[taisans.indexOf(oldTaiSanValue)] = new TaiSan.fromSnapshot(event.snapshot);
+    });
+  }
+  void _onTaiSanRemoved(Event event) {
+    setState(() {
+      taisans.removeWhere((element) => element.key == event.snapshot.key);
+      print('Removed');
     });
   }
 
