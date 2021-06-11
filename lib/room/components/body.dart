@@ -140,10 +140,14 @@ class _ListViewPhongState extends State<Body> {
                 itemBuilder: (context, position) {
                   return new OnSlide(
                     items: <ActionItems>[
-                      new ActionItems(icon: new IconButton(icon: new Icon(Icons.delete), onPressed: () {}, color: Colors.red,
-                      ), onPress: (){_deletePhong(context, _foundPhongs[position], position);},  backgroudColor: Color(0xff0f2c4e)),
+                      new ActionItems(icon: new IconButton(icon: new Icon(Icons.delete), onPressed: () {}, color: Color(0xffffb137),
+                      ), onPress: (){
+                        _deletePhong(context, _foundPhongs[position], position);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Xóa thành công')));
+                        },  backgroudColor: Color(0xff0f2c4e)),
                       new ActionItems(icon: new IconButton(  icon: new Icon(Icons.edit),
-                        onPressed: () {},color: Colors.green,
+                        onPressed: () {},color: Color(0xff20b4a7),
                       ), onPress: (){
                         Navigator.push(
                           context,

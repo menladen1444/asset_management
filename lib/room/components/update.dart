@@ -60,13 +60,13 @@ class _UpdateRoomState extends State<UpdateRoom> {
                         fillColor: Colors.black26,
                         filled: true,
                         enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
                           borderSide: const BorderSide(
                             color: Colors.transparent,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                       ),
@@ -89,6 +89,8 @@ class _UpdateRoomState extends State<UpdateRoom> {
                             'name': _nameController.text,
                           }).then((_) {
                             Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Đã lưu thay đổi')));
                           });
                         },
                         child: Row(

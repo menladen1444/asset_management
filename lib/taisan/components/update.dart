@@ -369,6 +369,8 @@ class _CreateState extends State<UpdateTaiSan> {
                                   'trangThaiQuet': trangThaiQuetController.text,
                                 }).then((_) {
                                   Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Đã lưu thay đổi')));
                                 });
                               },
                               child: Row(

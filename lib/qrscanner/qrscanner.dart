@@ -72,7 +72,7 @@ class _QRScannerState extends State<QRScanner> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add_a_photo),
+        child: Icon(Icons.image_outlined,size: 25,),
         onPressed: () async {
           await getImage();
           if (_image != null) {
@@ -149,7 +149,7 @@ class _QRScannerState extends State<QRScanner> {
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.all(10),
-                              primary: Colors.yellow, // background
+                              primary: Colors.black45, // background
                               onPrimary: Colors.blueAccent, // foreground
                             ),
                             onPressed: () async {
@@ -161,10 +161,10 @@ class _QRScannerState extends State<QRScanner> {
                               builder: (context, snapshot) {
                                 if(snapshot.data==false)
                                   {
-                                    return Icon(Icons.flash_off);
+                                    return Icon(Icons.flash_off,color: Colors.yellow,);
                                   }
                                 else{
-                                  return Icon(Icons.flash_on);
+                                  return Icon(Icons.flash_on,color: Colors.yellow,);
                                 }
                               },
                             )),
@@ -173,6 +173,7 @@ class _QRScannerState extends State<QRScanner> {
                         margin: EdgeInsets.all(8),
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
+                              primary: Color(0xfff04294f),
                               padding: const EdgeInsets.only(right: 20,left: 20,top: 10,bottom: 10),
                             ),
                             onPressed: () async {
@@ -183,60 +184,68 @@ class _QRScannerState extends State<QRScanner> {
                               future: controller?.getCameraInfo(),
                               builder: (context, snapshot) {
                                 if (snapshot.data != null) {
-                                  return Text(
-                                      'Camera facing ${describeEnum(snapshot.data)}', style: TextStyle(fontSize: 20));
+                                  if(describeEnum(snapshot.data) == 'back')
+                                    {
+                                      return Icon(Icons.camera_front_rounded);
+                                    }
+                                  else{
+                                    return Icon(Icons.camera_rear_rounded);
+                                  }
                                 } else {
                                   return Text('loading');
                                 }
                               },
                             )),
-                      )
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(8),
+
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.only(right: 20,left: 20,top: 10,bottom: 10),
+                              primary: Color(0xffffb137), // background
+                              onPrimary: Colors.white, // foreground
+                            ),
+                            onPressed: () async {
+                              await controller?.pauseCamera();
+                            },
+                            child: Icon(Icons.pause)
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(8),
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.only(right: 20,left: 20,top: 10,bottom: 10),
+                              primary: Color(0xff20b4a7), // background
+                              onPrimary: Colors.white, // foreground
+                            ),
+                            onPressed: () async {
+                              await controller?.resumeCamera();
+                            },
+                            child: Icon(Icons.play_arrow_rounded)
+                        ),
+                      ),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
+
                       Container(
                         margin: EdgeInsets.all(8),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
+                            side: BorderSide(width: 2.0, color: Color(0xff021930)),
                             padding: const EdgeInsets.only(right: 20,left: 20,top: 10,bottom: 10),
-                            primary: Colors.red, // background
-                            onPrimary: Colors.white, // foreground
-                          ),
-                          onPressed: () async {
-                            await controller?.pauseCamera();
-                          },
-                          child: Text('pause', style: TextStyle(fontSize: 20)),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.only(right: 20,left: 20,top: 10,bottom: 10),
-                            primary: Colors.green, // background
-                            onPrimary: Colors.white, // foreground
-                          ),
-                          onPressed: () async {
-                            await controller?.resumeCamera();
-                          },
-                          child: Text('resume', style: TextStyle(fontSize: 20)),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.only(right: 20,left: 20,top: 10,bottom: 10),
-                            primary: Colors.blueGrey, // background
+                            primary: Colors.transparent, // background
                             onPrimary: Colors.white, // foreground
                           ),
                           onPressed: () async {
                             await Navigator.pop(context);
                           },
-                          child: Text('Cancel', style: TextStyle(fontSize: 20)),
+                          child: Text('về trang chủ', style: TextStyle(fontSize: 20)),
                         ),
                       ),
                     ],

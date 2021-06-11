@@ -62,13 +62,13 @@ class _CreateRoomState extends State<CreateRoom> {
                         fillColor: Colors.black26,
                         filled: true,
                         enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
                           borderSide: const BorderSide(
                             color: Colors.transparent,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                       ),
@@ -91,6 +91,8 @@ class _CreateRoomState extends State<CreateRoom> {
                             'idUser': uid
                           }).then((_) {
                             Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Thêm phòng thành công')));
                           });
                         },
                         child: Row(
